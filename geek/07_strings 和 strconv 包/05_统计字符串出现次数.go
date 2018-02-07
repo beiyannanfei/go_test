@@ -1,3 +1,6 @@
+//Count 用于计算字符串 str 在字符串 s 中出现的非重叠次数：
+//strings.Count(s, str string) int
+
 package main
 
 import (
