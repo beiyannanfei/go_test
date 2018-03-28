@@ -23,11 +23,11 @@ func (de *DivideError) Error() string {
 // 定义 `int` 类型除法运算的函数
 func Divide(varDividee int, varDivider int) (result int, errorMsg string) {
 	if varDivider == 0 {
-		dData := DivideError{
+		dData := DivideError{		//定义一个DivideError类型的变量
 			dividee: varDividee,
 			divider: varDivider,
 		}
-		errorMsg = dData.Error()
+		errorMsg = dData.Error()	//调用Error接口
 		return
 	} else {
 		return varDividee / varDivider, ""
