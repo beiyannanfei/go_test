@@ -16,7 +16,9 @@ func dingyi() { //数组的定义
 	for i := 0; i < len(balance); i++ {
 		fmt.Printf("balance[%d] = %f\n", i, balance[i])
 	}
+	fmt.Printf("=========== all balance is %#v\n", balance)
 	for i := 0; i < len(balance1); i++ {
 		fmt.Printf("balance1[%d] = %f\n", i, balance1[i])
 	}
+	fmt.Printf("=========== all balance1 is %v\n", balance1)
 }
