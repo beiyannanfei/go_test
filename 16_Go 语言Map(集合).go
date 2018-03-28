@@ -28,6 +28,7 @@ func delMap() {
 	for country, capital := range countryCapitalMap {
 		fmt.Printf("country: %s, capital: %s\n", country, capital)
 	}
+	fmt.Printf("============all countryCapitalMap is: %#v\n", countryCapitalMap)
 	//删除元素
 	delete(countryCapitalMap, "France")
 	fmt.Println("删除元素后 map")
@@ -35,6 +36,7 @@ func delMap() {
 	for country := range countryCapitalMap {
 		fmt.Printf("country: %s, capital: %s\n", country, countryCapitalMap[country])
 	}
+	fmt.Printf("============all countryCapitalMap is: %#v\n", countryCapitalMap)
 }
 
 func map1() {
