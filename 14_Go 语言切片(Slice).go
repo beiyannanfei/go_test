@@ -38,7 +38,7 @@ func appendSlice() { //切片追加元素
 	fmt.Println("numbers =", numbers)                                                   //numbers = [0 1]
 	numbers = append(numbers, 2, 3, 4)                                                  //同时追加多个元素
 	fmt.Println("numbers =", numbers)                                                   //numbers = [0 1 2 3 4]
-	fmt.Printf("len = %d, cat = %d, numbers = %x", len(numbers), cap(numbers), numbers) //len = 5, cat = 6, numbers = [0 1 2 3 4]
+	fmt.Printf("len = %d, cat = %d, numbers = %x\n", len(numbers), cap(numbers), numbers) //len = 5, cat = 6, numbers = [0 1 2 3 4]
 }
 
 func subSlice() { //切片截取
