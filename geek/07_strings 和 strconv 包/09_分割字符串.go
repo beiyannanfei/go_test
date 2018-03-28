@@ -18,7 +18,7 @@ func main() {
 	oriStr = "abcdef-ghijklmn-opqrst-uvwxyz"
 
 	slice2 := strings.Split(oriStr, "-")
-	fmt.Printf("slice2: %v\n", slice2)
+	fmt.Printf("slice2: %v\n", slice2)	//slice2: [abcdef ghijklmn opqrst uvwxyz]
 	for i, x := range slice2 {
 		fmt.Printf("index %v value is %v\n", i, x)
 	}
