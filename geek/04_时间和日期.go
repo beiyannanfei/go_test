@@ -25,4 +25,10 @@ func main() {
 	s := t.Format("2006-01-02")
 	fmt.Println(t, "=>", s)
 	// Wed Dec 21 08:52:14 +0000 UTC 2011 => 20111221
+
+	timeStamp := t.Unix()
+	fmt.Printf("timeStamp: %v\n", timeStamp) //秒级时间戳
+
+	timeStamp = t.UnixNano()
+	fmt.Printf("timeStamp: %v\n", timeStamp) //纳秒级时间戳
 }

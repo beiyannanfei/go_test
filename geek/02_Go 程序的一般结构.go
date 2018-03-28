@@ -20,6 +20,8 @@ func main() {
 	Func1()
 	// ...
 	fmt.Println(a)
+	var t = new(T)
+	t.Method1()
 }
 
 func (t T) Method1() {
