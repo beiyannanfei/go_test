@@ -2,17 +2,17 @@ package app
 
 //https://github.com/bwmarrin/snowflake
 import (
-	""
+	"github.com/bwmarrin/snowflake"
 	"fmt"
 )
 
 //生成一个id，类似uuid
 func GeneraterId() {
 	epoch := 1522292178485  //毫秒级时间戳
-	snowflake.Epoch = epoch //Custom Epoch
+	snowflake.Epoch = int64(epoch) //Custom Epoch
 
 	nodeId := 1 //1~1023
-	node, err := snowflake.NewNode(nodeId)
+	node, err := snowflake.NewNode(int64(nodeId))
 	if err != nil {
 		fmt.Printf("make snowflake node err: %v", err)
 		return
@@ -20,7 +20,7 @@ func GeneraterId() {
 	id := node.Generate()
 
 	// Print out the ID in a few different ways.
-	fmt.Printf("Int64  ID: %d\n", id)
+	fmt.Printf("Int64  ID: %d\n", id.Int64())
 	fmt.Printf("String ID: %s\n", id)
 	fmt.Printf("Base2  ID: %s\n", id.Base2())
 	fmt.Printf("Base64 ID: %s\n", id.Base64())
