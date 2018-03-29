@@ -1,4 +1,4 @@
-package trans	//一个目录中只能包含一个package且目录名称要和包名称保持一致
+package trans //一个目录中只能包含一个package且目录名称要和包名称保持一致
 
 import "math"
 

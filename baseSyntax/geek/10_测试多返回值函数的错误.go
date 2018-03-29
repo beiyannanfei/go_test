@@ -19,7 +19,7 @@ func err_test() {
 	// anInt, err = strconv.Atoi(origStr)
 	an, err := strconv.Atoi(orig)
 	if err != nil {
-		fmt.Printf("orig %s is not an integer - exiting with error\n", orig)
+		fmt.Printf("orig %s is not an integer - exiting with error\n err: %v\n", orig, err.Error())
 		return
 	}
 	fmt.Printf("The integer is %d\n", an)

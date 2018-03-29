@@ -5,6 +5,7 @@ import "fmt"
 func main() {
 	goto1()
 	goto2()
+	println()
 
 }
 
