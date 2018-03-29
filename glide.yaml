@@ -1,4 +1,5 @@
-package: .
+package: github.com/beiyannanfei/go_test
 import:
 - package: github.com/bwmarrin/snowflake
 - package: github.com/mediocregopher/radix.v2
+- package: github.com/sirupsen/logrus
