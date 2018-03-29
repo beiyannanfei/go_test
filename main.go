@@ -1,7 +1,9 @@
 package main
 
-import "github.com/beiyannanfei/go_test/app"
+import (
+	_ "github.com/beiyannanfei/go_test/app" //生成一个全局唯一id (放开注释可以直接使用)
+	_ "github.com/beiyannanfei/go_test/app/redis"
+)
 
 func main() {
-	//app.GeneraterId()	//生成一个全局唯一id (放开注释可以直接使用)
 }

@@ -1,3 +1,4 @@
 package: .
 import:
 - package: github.com/bwmarrin/snowflake
+- package: github.com/mediocregopher/radix.v2

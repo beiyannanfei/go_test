@@ -7,7 +7,7 @@ import (
 )
 
 //生成一个id，类似uuid
-func GeneraterId() {
+func init() {
 	epoch := 1522292178485  //毫秒级时间戳
 	snowflake.Epoch = int64(epoch) //Custom Epoch
 
