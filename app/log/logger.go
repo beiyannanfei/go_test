@@ -12,9 +12,11 @@ func init() {
 	log.SetOutput(os.Stdout)
 
 	log.SetLevel(log.DebugLevel) //日志输出基本
+
+	//MylogTest()
 }
 
-func LogTest() {
+func MylogTest() {
 	argNum := 123
 	argStr := "abc"
 	log.Debugf("debug level argNum: %v, argStr: %v", argNum, argStr)
