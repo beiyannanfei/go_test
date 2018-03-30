@@ -1,10 +1,16 @@
-hash: 77a06640dff1f3b03b6ceb2055c1e470ad88f2229820abddfe85ecac0559d3af
-updated: 2018-03-30T12:34:51.166723+08:00
+hash: 45b35a3f46f99f72e09245b49eca82e9e63a5cbf721dd9ac19f0158b229dbe5e
+updated: 2018-03-30T15:58:56.603896+08:00
 imports:
 - name: github.com/bwmarrin/snowflake
   version: f613937295cd129f1ba08754f64a6edcdd0a1649
+- name: github.com/go-sql-driver/mysql
+  version: a0583e0143b1624142adab07e0e97fe106d99561
 - name: github.com/jinzhu/gorm
-  version: 52c5c8127cf4aeffde3e0aa9222640832075a90f
+  version: 6ed508ec6a4ecb3531899a69cbc746ccf65a4166
+  subpackages:
+  - dialects/mysql
+- name: github.com/jinzhu/inflection
+  version: 04140366298a54a039076d798123ffa108fff46c
 - name: github.com/mediocregopher/radix.v2
   version: 6a0c5624776f3f6ab0416da199aecc6991322b3f
   subpackages:

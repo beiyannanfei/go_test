@@ -5,9 +5,10 @@ import (
 	//_ "github.com/beiyannanfei/go_test/app/redis"		//redis客户端
 	//_ "github.com/beiyannanfei/go_test/app/redis_pool"	//redis连接池
 	_ "github.com/beiyannanfei/go_test/app/log" //log测试
+	"github.com/beiyannanfei/go_test/app/db"
 )
 
 func main() {
 	//base.Time_test()		//时间相关
-
+	db.Run()
 }
