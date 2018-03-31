@@ -11,9 +11,9 @@ func Run() {
 		return
 	}
 
-	createTb()
+	//createTb()
 
-	checkTableExists()
+	//checkTableExists()
 
 	do()
 }
