@@ -67,5 +67,59 @@ func main() {
 		})
 	}
 
+	//控制器
+	type Login struct {
+		User     string `form:"user" json:"user" binding:"required"`
+		Password string `form:"password" json:"password" binding:"required"`
+	}
+
+	//控制器 绑定JSON的例子
+	// curl -X POST "127.0.0.1:8090/post/login/json" -H "Content-Type: application/json" -d "{\"user\":\"aaa\",\"password\":\"123\"}"
+	router.POST("/post/login/json", func(c *gin.Context) {
+		var json Login
+		err := c.BindJSON(&json)
+		if nil != err {
+			fmt.Printf("bind json error: %v\n", err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			return
+		}
+
+		user := json.User
+		pwd := json.Password
+		if user != "aaa" || pwd != "123" {
+			fmt.Printf("user or pwd illegal user: %s, pwd: %s\n", user, pwd)
+			c.JSON(http.StatusUnauthorized, gin.H{"err": "user or pwd illegal"})
+			return
+		}
+
+		fmt.Printf("login success user: %s, pwd: %s\n", user, pwd)
+		c.JSON(http.StatusOK, gin.H{"msg": "login success"})
+		return
+	})
+
+	//控制器绑定form的例子
+	// curl "127.0.0.1:8090/post/login/form" -d "user=aaa&password=123"
+	router.POST("/post/login/form", func(c *gin.Context) {
+		var form Login
+		err := c.Bind(&form)
+		if nil != err {
+			fmt.Printf("bind form error: %v\n", err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+			return
+		}
+
+		user := form.User
+		pwd := form.Password
+		if user != "aaa" || pwd != "123" {
+			fmt.Printf("user or pwd illegal user: %s, pwd: %s\n", user, pwd)
+			c.JSON(http.StatusUnauthorized, gin.H{"err": "user or pwd illegal"})
+			return
+		}
+
+		fmt.Printf("login success user: %s, pwd: %s\n", user, pwd)
+		c.JSON(http.StatusOK, gin.H{"msg": "login success"})
+		return
+	})
+
 	http.ListenAndServe(":8090", router)
 }
