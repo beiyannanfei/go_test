@@ -170,7 +170,53 @@ func main() {
 		c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded", filename))
 	})
 
+	//JSON/XML/YAML响应
+	//curl "127.0.0.1:8090/more/json"
+	router.GET("/more/json", func(c *gin.Context) {
+		// You also can use a struct
+		var msg struct {
+			Name    string `json:"user" xml:"user"`
+			Message string
+			Number  int
+		}
+		msg.Name = "Lena"
+		msg.Message = "hey"
+		msg.Number = 123
+		// 注意 msg.Name 变成了 "user" 字段
+		// 以下方式都会输出 :   {"user": "Lena", "Message": "hey", "Number": 123}
+		//c.JSON(http.StatusOK, gin.H{"user": "Lena", "Message": "hey", "Number": 123})
+		//c.XML(http.StatusOK, gin.H{"user": "Lena", "Message": "hey", "Number": 123})
+		c.YAML(http.StatusOK, gin.H{"user": "Lena", "Message": "hey", "Number": 123})
 
+		//c.JSON(http.StatusOK, msg)
+		//c.XML(http.StatusOK, msg)	//会报错
+		//c.YAML(http.StatusOK, msg)
+	})
+
+	//视图响应
+	//先要使用 LoadHTMLTemplates() 方法来加载模板文件
+	//加载模板
+		//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
+	//curl "127.0.0.1:8090/tmp/index"
+	/*router.LoadHTMLGlob("templates/*")	//只能加载一次(和下边的LoadHTMLGlob冲突)
+	router.GET("/tmp/index", func(c *gin.Context) {
+		//根据完整文件名渲染模板，并传递参数
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"title": "Main website bynf",
+		})
+	})*/
+
+	//不同文件夹下模板名字可以相同，此时需要 LoadHTMLGlob() 加载两层模板路径
+	router.LoadHTMLGlob("templates/**/*")
+	//curl "127.0.0.1:8090/tmp/post/index"
+	router.GET("/tmp/post/index", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "posts/index.tmpl", gin.H{
+			"title": "Posts",
+		})
+		c.HTML(http.StatusOK, "users/index.tmpl", gin.H{
+			"title": "Users",
+		})
+	})
 
 	//http.ListenAndServe(":8090", router)		//两种方式均可以启动服务
 	router.Run(":8090")
