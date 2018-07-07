@@ -69,8 +69,8 @@ func main() {
 	{
 		//curl "127.0.0.1:8090/v1/get?q1=aaa&q2=123"
 		v1Group.GET("/get", func(c *gin.Context) {
-			q1 := c.Query("q1");
-			q2 := c.Query("q2");
+			q1 := c.Query("q1")
+			q2 := c.Query("q2")
 			fmt.Printf("v1Group get q1: %s, q2: %s", q1, q2)
 			c.JSON(200, gin.H{"msg": "OK"})
 		})
