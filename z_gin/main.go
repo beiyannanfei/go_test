@@ -218,9 +218,25 @@ func main() {
 		})
 	})
 
+	//文件响应
 	//获取当前文件的相对路径
-	//curl "127.0.0.1:8090/assets"
+	//curl "127.0.0.1:8090/assets/"
+	//curl "127.0.0.1:8090/assets/a.jpg"
+	//curl "127.0.0.1:8090/assets/text.md"
 	router.Static("/assets", "./assets")
+
+	//获取相对路径下的文件
+	//curl "127.0.0.1:8090/favicon.ico"
+	router.StaticFile("/favicon.ico", "./assets/favicon.ico")
+
+	//响应文件夹
+	//curl "127.0.0.1:8090/more_static/"		=> assets/index.html
+	//curl "127.0.0.1:8090/more_static/a.jpg"	=> assets/a.jpg
+	//curl "127.0.0.1:8090/more_static/text.md"	=> assets/text.md
+	router.StaticFS("/more_static", http.Dir("assets"))
+
+
+
 
 	//http.ListenAndServe(":8090", router)		//两种方式均可以启动服务
 	router.Run(":8090")
