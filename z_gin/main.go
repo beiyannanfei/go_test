@@ -196,7 +196,7 @@ func main() {
 	//视图响应
 	//先要使用 LoadHTMLTemplates() 方法来加载模板文件
 	//加载模板
-		//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
+	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
 	//curl "127.0.0.1:8090/tmp/index"
 	/*router.LoadHTMLGlob("templates/*")	//只能加载一次(和下边的LoadHTMLGlob冲突)
 	router.GET("/tmp/index", func(c *gin.Context) {
@@ -217,6 +217,10 @@ func main() {
 			"title": "Users",
 		})
 	})
+
+	//获取当前文件的相对路径
+	//curl "127.0.0.1:8090/assets"
+	router.Static("/assets", "./assets")
 
 	//http.ListenAndServe(":8090", router)		//两种方式均可以启动服务
 	router.Run(":8090")
