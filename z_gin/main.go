@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"io"
+	"time"
 )
 
 func main() {
@@ -239,6 +240,34 @@ func main() {
 	//curl "127.0.0.1:8090/redirect/baidu"
 	router.GET("/redirect/baidu", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "http://www.baidu.com")
+	})
+
+	//goroutine 机制可以方便地实现异步处理
+
+	//异步  先返回请求后5s再打印输出日志
+	//curl "127.0.0.1:8090/get/async"
+	router.GET("/get/async", func(c *gin.Context) {
+		// goroutine 中只能使用只读的上下文 c.Copy()
+		cCp := c.Copy()
+		go func() {
+			//延时5秒
+			time.Sleep(5 * time.Second)
+
+			//注意使用只读上下文
+			fmt.Printf("Done! in path: %s\n", cCp.Request.URL.Path)
+		}()
+		c.JSON(http.StatusOK, gin.H{"msg": "OK"})
+	})
+
+	//同步 5s后返回请求
+	//curl "127.0.0.1:8090/get/sync"
+	router.GET("/get/sync", func(c *gin.Context) {
+		fmt.Printf("begin get sync url: %s\n", c.Request.URL.Path)
+		time.Sleep(5 * time.Second)
+
+		// 注意可以使用原始上下文
+		fmt.Printf("end get sync 5s after url: %s\n", c.Request.URL.Path)
+		c.JSON(http.StatusOK, gin.H{"msg": "OK"})
 	})
 
 	//http.ListenAndServe(":8090", router)		//两种方式均可以启动服务
