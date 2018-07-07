@@ -235,8 +235,11 @@ func main() {
 	//curl "127.0.0.1:8090/more_static/text.md"	=> assets/text.md
 	router.StaticFS("/more_static", http.Dir("assets"))
 
-
-
+	//重定向
+	//curl "127.0.0.1:8090/redirect/baidu"
+	router.GET("/redirect/baidu", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "http://www.baidu.com")
+	})
 
 	//http.ListenAndServe(":8090", router)		//两种方式均可以启动服务
 	router.Run(":8090")
