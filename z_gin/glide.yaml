@@ -2,3 +2,7 @@ package: github.com/beiyannanfei/go_test/z_gin
 import:
 - package: github.com/gin-gonic/gin
   version: ~1.2.0
+- package: gopkg.in/go-playground/validator.v8
+  version: ~9.19.0
+- package: github.com/go-playground/universal-translator
+  version: ~0.16.0
