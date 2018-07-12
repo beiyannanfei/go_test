@@ -3,16 +3,16 @@ package main
 import "fmt"
 
 func main() {
-	s1();
+	s1()
 	fmt.Println("============================")
 
 }
 
 func structParam(book Books) { //结构体作为函数参数
-	fmt.Printf("Book title : %s\n", book.title);
-	fmt.Printf("Book author : %s\n", book.author);
-	fmt.Printf("Book subject : %s\n", book.subject);
-	fmt.Printf("Book book_id : %d\n", book.book_id);
+	fmt.Printf("Book title : %s\n", book.title)
+	fmt.Printf("Book author : %s\n", book.author)
+	fmt.Printf("Book subject : %s\n", book.subject)
+	fmt.Printf("Book book_id : %d\n", book.book_id)
 }
 
 type Books struct {
@@ -55,8 +55,8 @@ func s1() {
 
 func printBook(book *Books) {
 	println(book)
-	fmt.Printf("Book title : %s\n", book.title);		//结构体不需要取值操作符*
-	fmt.Printf("Book author : %s\n", book.author);
-	fmt.Printf("Book subject : %s\n", book.subject);
-	fmt.Printf("Book book_id : %d\n", book.book_id);
+	fmt.Printf("Book title : %s\n", book.title)		//结构体不需要取值操作符*
+	fmt.Printf("Book author : %s\n", book.author)
+	fmt.Printf("Book subject : %s\n", book.subject)
+	fmt.Printf("Book book_id : %d\n", book.book_id)
 }

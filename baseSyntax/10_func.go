@@ -7,14 +7,14 @@ import (
 
 func main() {
 	res := max(10, 20)
-	fmt.Printf("the max num is %d\n", res)
+	fmt.Printf("the max num is %d\n", res)		//the max num is 20
 	a, b := swap("hello", "world")
-	fmt.Println(a, b);
+	fmt.Println(a, b)	//world hello
 	var c, d = 100, 200
-	fmt.Printf("before swap c: %d, d: %d\n", c, d)
+	fmt.Printf("before swap c: %d, d: %d\n", c, d)	//before swap c: 100, d: 200
 	quot(&c, &d)
-	fmt.Printf("after swap c: %d, d: %d\n", c, d)
-	funAsVal()
+	fmt.Printf("after swap c: %d, d: %d\n", c, d)		//after swap c: 200, d: 100
+	funAsVal()		//3
 	fmt.Println("=========================")
 	nextNumber := closureFun()
 	fmt.Println(nextNumber()) //1
@@ -57,8 +57,8 @@ func add(x1, x2 int) func() (int, int) {
 func closureFun() func() int { //闭包函数
 	i := 0
 	return func() int {
-		i += 1;
-		return i;
+		i += 1
+		return i
 	}
 }
 

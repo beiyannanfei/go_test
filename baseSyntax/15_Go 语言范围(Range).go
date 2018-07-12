@@ -25,9 +25,22 @@ func main() {
 	for k, v := range kvs {
 		fmt.Printf("%s -> %s\n", k, v)
 	}
+	/*
+	a -> apple
+	b -> banana
+	*/
+
 	fmt.Println("---------------------------")
 	//range也可以用来枚举Unicode字符串。第一个参数是字符的索引，第二个是字符（Unicode的值）本身。
 	for index, c := range "abcdef" {
 		fmt.Printf("%d code is %d\n", index, c)
 	}
+	/*
+	0 code is 97
+	1 code is 98
+	2 code is 99
+	3 code is 100
+	4 code is 101
+	5 code is 102
+	*/
 }

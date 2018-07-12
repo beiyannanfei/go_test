@@ -28,6 +28,7 @@ func delMap() {
 	for country, capital := range countryCapitalMap {
 		fmt.Printf("country: %s, capital: %s\n", country, capital)
 	}
+	//============all countryCapitalMap is: map[string]string{"India":"New Delhi", "France":"Paris", "Italy":"Rome", "Japan":"Tokyo"}
 	fmt.Printf("============all countryCapitalMap is: %#v\n", countryCapitalMap)
 	//删除元素
 	delete(countryCapitalMap, "France")
@@ -36,6 +37,7 @@ func delMap() {
 	for country := range countryCapitalMap {
 		fmt.Printf("country: %s, capital: %s\n", country, countryCapitalMap[country])
 	}
+	//============all countryCapitalMap is: map[string]string{"Japan":"Tokyo", "India":"New Delhi", "Italy":"Rome"}
 	fmt.Printf("============all countryCapitalMap is: %#v\n", countryCapitalMap)
 }
 
@@ -54,14 +56,14 @@ func map1() {
 		fmt.Printf("country %s, capital is %s\n", index, countryCapitalMap[index])
 	}
 	fmt.Println("---------------------------")
-	var captial string
+	var capitial string
 	var ok bool
-	captial, ok = countryCapitalMap["France"]
-	fmt.Println(captial, ok) //Paris true
-	captial, ok = countryCapitalMap["United States"]
-	fmt.Println(captial, ok) // false
-	if (ok) {
-		fmt.Println("Capital of United States is", captial)
+	capitial, ok = countryCapitalMap["France"]
+	fmt.Println(capitial, ok) //Paris true
+	capitial, ok = countryCapitalMap["United States"]
+	fmt.Println(capitial, ok) // false
+	if ok {
+		fmt.Println("Capital of United States is", capitial)
 	} else {
 		fmt.Println("Capital of United States is not present") //Capital of United States is not present
 	}

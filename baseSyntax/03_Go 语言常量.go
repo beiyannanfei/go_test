@@ -34,7 +34,7 @@ func iota1() {
 		b = iota
 		c = iota
 	)
-	println("iota1: ", a, b, c)
+	println("iota1: ", a, b, c)	//iota1:  0 1 2
 }
 
 //第一个 iota 等于 0，每当 iota 在新的一行被使用时，它的值都会自动加 1；所以 a=0, b=1, c=2 可以简写为如下形式：

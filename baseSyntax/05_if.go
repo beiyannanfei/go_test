@@ -6,18 +6,18 @@ package main
 import "fmt"
 
 func if_test() {
-	var a = 20;
-	if (a > 10) {
-		fmt.Println("a > 10");
+	var a = 20
+	if a > 10 {
+		fmt.Println("a > 10")
 		return
 	}
-	fmt.Println("a <= 10");
+	fmt.Println("a <= 10")
 	return
 }
 
 func if_test1() {
 	var a = false
-	if (!!a) {
+	if !!a {
 		fmt.Println("a is true")
 		return
 	}

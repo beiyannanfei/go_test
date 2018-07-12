@@ -8,13 +8,13 @@ func main() {
 
 	ip = &a /* 指针变量的存储地址 */
 
-	fmt.Printf("a 变量的地址是: %x\n", &a)
+	fmt.Printf("a 变量的地址是: %x\n", &a)			//a 变量的地址是: c420016098
 
 	/* 指针变量的存储地址 */
-	fmt.Printf("ip 变量储存的指针地址: %x\n", ip)
+	fmt.Printf("ip 变量储存的指针地址: %x\n", ip)	//ip 变量储存的指针地址: 0xc420084008
 
 	/* 使用指针访问值 */
-	fmt.Printf("*ip 变量的值: %d\n", *ip)
+	fmt.Printf("*ip 变量的值: %d\n", *ip)		//*ip 变量的值: 20
 
 	nilPointer()
 	fmt.Println("-----------------------")
@@ -23,8 +23,8 @@ func main() {
 
 func nilPointer() { //空指针
 	var ptr *int
-	fmt.Printf("ptr value is: %x\n", ptr)
-	if (ptr != nil) {
+	fmt.Printf("ptr value is: %x\n", ptr)		//ptr value is: 0
+	if ptr != nil {
 		fmt.Println("非空指针")
 	}
 }

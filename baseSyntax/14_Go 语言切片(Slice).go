@@ -62,10 +62,10 @@ func subSlice() { //切片截取
 
 func nilSlice() { //空切片
 	var numbers []int
-	if (numbers == nil) {
+	if numbers == nil {
 		fmt.Printf("切片是空的\n")
 	}
-	fmt.Printf("len = %d cap = %d slice = %v\n", len(numbers), cap(numbers), numbers)
+	fmt.Printf("len = %d cap = %d slice = %v\n", len(numbers), cap(numbers), numbers)		//len = 0 cap = 0 slice = []
 }
 
 func printSlice() {

@@ -13,10 +13,10 @@ func main() {
 }
 
 func test(n int) (res1 int, res2 int) {
-	if (n == 1) {
+	if n == 1 {
 		res1 = 10	//当返回一个值的时候直接采用赋值
 		return
-	} else if (n == 2) {
+	} else if n == 2 {
 		res2 = 20
 		return
 	} else {
