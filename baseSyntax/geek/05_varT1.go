@@ -5,7 +5,7 @@ var a = "G"
 func main() {
 	n()
 	m()
-	n()		//GOG
+	n() //GOG
 }
 
 func n() { print(a) }

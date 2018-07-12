@@ -22,3 +22,8 @@ func main() {
 	upper = strings.ToUpper(orig)
 	fmt.Printf("The uppercase string is: %s\n", upper)
 }
+/*
+The original string is: Hey, how are you George?
+The lowercase string is: hey, how are you george?
+The uppercase string is: HEY, HOW ARE YOU GEORGE?
+*/

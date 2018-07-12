@@ -10,19 +10,19 @@ import (
 )
 
 func main() {
-	var oriStr1 string = "   aaa bbb   ";
-	fmt.Printf("oriStr1 is : %v\n", oriStr1)
-	var trimStr1 string = strings.TrimSpace(oriStr1)
-	fmt.Printf("trimStr1 is : %v\n", trimStr1)
+	var oriStr1 = "   aaa bbb   "
+	fmt.Printf("oriStr1 is : %v\n", oriStr1)		//oriStr1 is :    aaa bbb
+	var trimStr1 = strings.TrimSpace(oriStr1)
+	fmt.Printf("trimStr1 is : %v\n", trimStr1)	//trimStr1 is : aaa bbb
 
-	var oriStr2 string = "aaaBBBBCCCCaaaa";
-	fmt.Printf("oriStr2 is : %v\n", oriStr2)
-	var trimStr2 string = strings.Trim(oriStr2, "a")
-	fmt.Printf("trimStr2 is : %v\n", trimStr2)
+	var oriStr2 = "aaaBBBBCCCCaaaa"
+	fmt.Printf("oriStr2 is : %v\n", oriStr2)		//oriStr2 is : aaaBBBBCCCCaaaa
+	var trimStr2 = strings.Trim(oriStr2, "a")
+	fmt.Printf("trimStr2 is : %v\n", trimStr2)	//trimStr2 is : BBBBCCCC
 
-	var leftTrimStr2 string = strings.TrimLeft(oriStr2, "a")
-	fmt.Printf("leftTrimStr2 is : %v\n", leftTrimStr2)
+	var leftTrimStr2 = strings.TrimLeft(oriStr2, "a")
+	fmt.Printf("leftTrimStr2 is : %v\n", leftTrimStr2)	//leftTrimStr2 is : BBBBCCCCaaaa
 
-	var rightTrimStr2 string = strings.TrimRight(oriStr2, "a")
-	fmt.Printf("rightTrimStr2 is : %v\n", rightTrimStr2)
+	var rightTrimStr2 = strings.TrimRight(oriStr2, "a")
+	fmt.Printf("rightTrimStr2 is : %v\n", rightTrimStr2)	//rightTrimStr2 is : aaaBBBBCCCC
 }

@@ -13,5 +13,5 @@ func main() {
 	var newS string
 
 	newS = strings.Repeat(origS, 3)
-	fmt.Printf("The new repeated string is: %s\n", newS)
+	fmt.Printf("The new repeated string is: %s\n", newS)	//The new repeated string is: Hi there! Hi there! Hi there!
 }

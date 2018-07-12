@@ -25,20 +25,20 @@ func main() {
 	var an int
 	var newS string
 
-	fmt.Printf("The size of ints is: %d\n", strconv.IntSize)
+	fmt.Printf("The size of ints is: %d\n", strconv.IntSize)		//The size of ints is: 64
 
 	an, _ = strconv.Atoi(orig)
-	fmt.Printf("The integer is: %d\n", an)
+	fmt.Printf("The integer is: %d\n", an)						//The integer is: 666
 	an = an + 5
 	newS = strconv.Itoa(an)
-	fmt.Printf("The new string is: %s\n", newS)
+	fmt.Printf("The new string is: %s\n", newS)					//The new string is: 671
 
 	orig = "123.456"
 	var f float64
 	f, _ = strconv.ParseFloat(orig, 64)
-	fmt.Printf("The float is: %v\n", f)
+	fmt.Printf("The float is: %v\n", f)							//The float is: 123.456
 	f += 0.123456
-	fmt.Printf("The float is: %v\n", f)
+	fmt.Printf("The float is: %v\n", f)							//The float is: 123.57945600000001
 	newS = strconv.FormatFloat(f, 'f', 7, 64)
-	fmt.Printf("The new string is: %s\n", newS)
+	fmt.Printf("The new string is: %s\n", newS)					//The new string is: 123.5794560
 }

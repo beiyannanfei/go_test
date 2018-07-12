@@ -22,5 +22,11 @@ func main() {
 	for i, x := range slice2 {
 		fmt.Printf("index %v value is %v\n", i, x)
 	}
+	/*
+index 0 value is abcdef
+index 1 value is ghijklmn
+index 2 value is opqrst
+index 3 value is uvwxyz
+	*/
 
 }
