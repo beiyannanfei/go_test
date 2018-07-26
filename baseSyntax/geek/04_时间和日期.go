@@ -31,4 +31,7 @@ func main() {
 
 	timeStamp = t.UnixNano()
 	fmt.Printf("timeStamp: %v\n", timeStamp) //纳秒级时间戳
+
+	z := time.Time{}
+	fmt.Printf("z: %v, zStr: %v\n", z, z.String())
 }
