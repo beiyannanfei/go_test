@@ -14,3 +14,4 @@ func main() {
 	sort.Sort(sort.Reverse(sort.IntSlice(intList)))	//降序
 	fmt.Printf("oriIntList: %#v, intList: %#v\n", oriIntList, intList)
 }
+
