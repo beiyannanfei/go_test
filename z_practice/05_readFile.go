@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"fmt"
 )
-
+// cd /Users/wyq/workspace/go_path/src/github.com/beiyannanfei/go_test/z_practice && go run 05_readFile.go
 func main() {
 	buff, err := ioutil.ReadFile("./05_readFile.go")
 	if err != nil {

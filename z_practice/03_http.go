@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"time"
 )
-
+// cd /Users/wyq/workspace/go_path/src/github.com/beiyannanfei/go_test/z_practice && go run 03_http.go
 func main() {
 	go goPost()
 	go goGet()

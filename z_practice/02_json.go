@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"encoding/json"
 )
-
+// cd /Users/wyq/workspace/go_path/src/github.com/beiyannanfei/go_test/z_practice && go run 02_json.go
 func main() {
 	type Person struct {		//注意：首字母要大写
 		Name  string `json:"name"`
