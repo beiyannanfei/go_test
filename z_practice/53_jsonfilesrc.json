@@ -1,0 +1,89 @@
+{
+  "1.0.0_1.1.9": {
+    "showServerList": false,
+    "gConfigList": [
+      {
+        "configKey": "发布服务器(online)",
+        "globalConfigVO": {
+          "completeBundle": -1,
+          "urgentGConfigUrl":"http://xxxxxxx/global_configs/online/",
+          "announcement": 2,
+          "prefix": "announcement0711_"
+        }
+      }
+    ]
+  },
+  "1.1.0_1.1.9": {
+    "showServerList": false,
+    "gConfigList": [
+      {
+        "configKey": "发布服务器(online)",
+        "globalConfigVO": {
+          "completeBundle": -1,
+          "accountUrl": "https://xxxxxxaaaa.cn",
+          "downloadUrl": "",
+          "announcement": 2,
+          "prefix": "20180815end_"
+        }
+      }
+    ]
+  },
+  "1.2.0_1.2.9": {
+    "showServerList": false,
+    "gConfigList": [
+      {
+        "configKey": "发布服务器(online)",
+        "globalConfigVO": {
+          "completeBundle": -1,
+          "bundleCdnUrl": "https://wwww.xxxxxyyyy.cn/",
+          "forbidGuide": 0,
+          "updateFlag": 0
+        }
+      }
+    ]
+  },
+  "1.3.0_1.3.9": {
+    "showServerList": false,
+    "tags":["tester"],
+    "gConfigList": [
+      {
+        "configKey": "发布服务器(online)",
+        "globalConfigVO": {
+          "urgentGConfigUrl":"http://qqqq.sssss.cn/global_configs/online/",
+          "hashNameFLag": 1,
+          "updateFlag": 0,
+          "downloadUrl": ""
+        }
+      }
+    ]
+  },
+  "1.4.0_1.4.9": {
+    "showServerList": false,
+    "tags":["tester"],
+    "gConfigList": [
+      {
+        "configKey": "发布服务器(online)",
+        "globalConfigVO": {
+          "gameServerUrl": "https://dsfg.asdfgs.etgerbgv.cn/",
+          "resVersion": 0,
+          "testLoginOpen": 1,
+          "usherOpen": 0,
+          "avgShowTestUi": 0
+        }
+      }
+    ]
+  },
+  "default": {
+    "showServerList": false,
+    "tags":["tester"],
+    "gConfigList": [
+      {
+        "configKey": "发布服务器(online)",
+        "globalConfigVO": {
+          "urgentGConfigUrl":"http://asdf-qwer.jnrwtgewr.cn/145as364fewaf/online/",
+          "prefix": "20180815end_"
+        }
+      }
+    ]
+  }
+}
