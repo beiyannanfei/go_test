@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 )
 
 //Go语言里面有一个语法，可以直接判断是否是该类型的变量: value, ok = element.(T)，这里value就是变 量的值，ok是一个bool类型，element是interface变量，T是断言的类型。
@@ -16,8 +17,8 @@ type Person struct {
 	age  int
 }
 
-func (p *Person) String() string {
-	return fmt.Sprintf("(name: %v, age: %v years)", p.name, p.age)
+func (p Person) String() string {
+	return fmt.Sprintf("(name: %s, age: %s years)", p.name, strconv.Itoa(p.age))
 }
 
 func main() {
@@ -39,10 +40,25 @@ func main() {
 		}
 
 		if value, ok := element.(Person); ok {
-			fmt.Printf("list[%v] is an Person and its value is %v\n", index, value)
+			fmt.Printf("list[%v] is an Person and its value is %s\n", index, value)
 			continue
 		}
 
 		fmt.Printf("list[%v] is of a different type: %v\n", index, reflect.TypeOf(element))
+	}
+
+	fmt.Println("------------------------------------------------")
+
+	for index, element := range list {
+		switch value := element.(type) {	//需要强调的是:element.(type)语法不能在switch外的任何逻辑里面使用，如果你要在switch 外面判断一个类型就使用comma-ok。
+		case int:
+			fmt.Printf("list[%v] is an int and its value is %v\n", index, value)
+		case string:
+			fmt.Printf("list[%v] is an string and its value is %v\n", index, value)
+		case Person:
+			fmt.Printf("list[%v] is an Person and its value is %s\n", index, value)
+		default:
+			fmt.Printf("list[%v] is of a different type: %v\n", index, reflect.TypeOf(element))
+		}
 	}
 }
