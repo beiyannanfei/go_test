@@ -1,8 +1,14 @@
-hash: 6ba5fb5085fb2c2d756243f20a8e7d65794109cbd5080ad831e0b8d746d53a2b
-updated: 2018-10-09T16:14:51.161895+08:00
+hash: e1d466fde3d0a60e6565b0ac5a3a77b69c5e132801ac61abf27b7e9c405f1035
+updated: 2018-10-09T17:33:54.520413+08:00
 imports:
 - name: github.com/360EntSecGroup-Skylar/excelize
   version: eb62256d165607c6877ce88efbba10c119137b3d
 - name: github.com/go-sql-driver/mysql
   version: d523deb1b23d913de5bdada721a6071e71283618
+- name: github.com/monnand/goredis
+  version: e23c27d6345851094b8ccf9f5e63945bd30fb232
+- name: google.golang.org/appengine
+  version: ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06
+  subpackages:
+  - cloudsql
 testImports: []
