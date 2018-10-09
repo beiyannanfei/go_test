@@ -2,3 +2,5 @@ package: github.com/beiyannanfei/go_test/z_practice
 import:
 - package: github.com/360EntSecGroup-Skylar/excelize
   version: ~1.3.0
+- package: github.com/go-sql-driver/mysql
+  version: ~1.4.0
