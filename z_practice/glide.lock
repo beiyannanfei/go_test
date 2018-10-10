@@ -1,5 +1,5 @@
-hash: e1d466fde3d0a60e6565b0ac5a3a77b69c5e132801ac61abf27b7e9c405f1035
-updated: 2018-10-09T17:33:54.520413+08:00
+hash: ade6eca60e4e89f6da10afd3efb52276c3750bcdd4cbefac4b8cb366ddab103c
+updated: 2018-10-09T18:33:23.215832+08:00
 imports:
 - name: github.com/360EntSecGroup-Skylar/excelize
   version: eb62256d165607c6877ce88efbba10c119137b3d
@@ -11,4 +11,6 @@ imports:
   version: ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06
   subpackages:
   - cloudsql
+- name: labix.org/v2/mgo
+  version: "287"
 testImports: []

@@ -5,3 +5,4 @@ import:
 - package: github.com/go-sql-driver/mysql
   version: ~1.4.0
 - package: github.com/monnand/goredis
+- package: labix.org/v2/mgo
