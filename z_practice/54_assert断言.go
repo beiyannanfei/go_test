@@ -23,7 +23,7 @@ func (p Person) String() string {
 
 func main() {
 	list := make(List, 4)
-	list[0] = 1;
+	list[0] = 1
 	list[1] = "Hello"
 	list[2] = Person{"Dennis", 70}
 	list[3] = 1.23
