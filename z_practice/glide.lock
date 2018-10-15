@@ -1,8 +1,10 @@
-hash: ade6eca60e4e89f6da10afd3efb52276c3750bcdd4cbefac4b8cb366ddab103c
-updated: 2018-10-09T18:33:23.215832+08:00
+hash: b07bd8e608be12e06cf290165d2bf9587a5cc0cb63d8b1c61ba0e49450fdcd1b
+updated: 2018-10-15T14:58:46.133421+08:00
 imports:
 - name: github.com/360EntSecGroup-Skylar/excelize
   version: eb62256d165607c6877ce88efbba10c119137b3d
+- name: github.com/bitly/go-simplejson
+  version: aabad6e819789e569bd6aabf444c935aa9ba1e44
 - name: github.com/go-sql-driver/mysql
   version: d523deb1b23d913de5bdada721a6071e71283618
 - name: github.com/monnand/goredis
@@ -13,4 +15,7 @@ imports:
   - cloudsql
 - name: labix.org/v2/mgo
   version: "287"
+  subpackages:
+  - bson
+  - sasl
 testImports: []

@@ -6,3 +6,5 @@ import:
   version: ~1.4.0
 - package: github.com/monnand/goredis
 - package: labix.org/v2/mgo
+- package: github.com/bitly/go-simplejson
+  version: ~0.5.0
