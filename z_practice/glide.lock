@@ -1,5 +1,5 @@
-hash: f3c575a75dc579c48e70818357f312ce41765982153373de0046928d4ac53a16
-updated: 2018-10-30T16:10:10.18758+08:00
+hash: b32f5d21fbb1539427f7df25bf699132c248cd16868580e09c6baa3483244585
+updated: 2018-10-30T16:22:29.170027+08:00
 imports:
 - name: github.com/360EntSecGroup-Skylar/excelize
   version: 3e004d900b103379c2d62657a3070de4a2e8585a
@@ -11,6 +11,8 @@ imports:
   version: b869fe1415e4b9eb52f247441830d502aece2d4d
   subpackages:
   - json
+- name: github.com/go-redis/redis
+  version: b3d9bf10f6666b2ee5100a6f3f84f4caf3b4e37d
 - name: github.com/go-sql-driver/mysql
   version: d523deb1b23d913de5bdada721a6071e71283618
 - name: github.com/json-iterator/go
