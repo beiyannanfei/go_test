@@ -1,3 +1,9 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+
+---
+
 <!--
 If you are reporting a new issue, make sure that we do not have any duplicates
 already open. You can ensure this by searching the issue list for this
@@ -21,19 +27,17 @@ Briefly describe the problem you are having in a few paragraphs.
 
 **Describe the results you received:**
 
-
 **Describe the results you expected:**
-
 
 **Output of `go version`:**
 
-```
+```text
 (paste your output here)
 ```
 
 **Excelize version or commit ID:**
 
-```
+```text
 (paste here)
 ```
 

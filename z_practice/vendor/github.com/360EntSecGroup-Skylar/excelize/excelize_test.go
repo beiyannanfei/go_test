@@ -2,6 +2,7 @@ package excelize
 
 import (
 	"fmt"
+	"image/color"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
@@ -56,6 +57,10 @@ func TestOpenFile(t *testing.T) {
 	// Test get cell formula with illegal rows number.
 	xlsx.GetCellFormula("Sheet1", "B20")
 	xlsx.GetCellFormula("Sheet1", "B")
+	// Test get shared cell formula
+	xlsx.GetCellFormula("Sheet2", "H11")
+	xlsx.GetCellFormula("Sheet2", "I11")
+	getSharedForumula(&xlsxWorksheet{}, "")
 	// Test read cell value with given illegal rows number.
 	xlsx.GetCellValue("Sheet2", "a-1")
 	xlsx.GetCellValue("Sheet2", "A")
@@ -82,6 +87,11 @@ func TestOpenFile(t *testing.T) {
 	xlsx.SetCellValue("Sheet2", "F14", uint32(1<<32-1))
 	xlsx.SetCellValue("Sheet2", "F15", uint64(1<<32-1))
 	xlsx.SetCellValue("Sheet2", "F16", true)
+	xlsx.SetCellValue("Sheet2", "F17", complex64(5+10i))
+	t.Log(letterOnlyMapF('x'))
+	shiftJulianToNoon(1, -0.6)
+	timeFromExcelTime(61, true)
+	timeFromExcelTime(62, true)
 	// Test boolean write
 	booltest := []struct {
 		value    bool
@@ -125,7 +135,6 @@ func TestOpenFile(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 }
 
 func TestAddPicture(t *testing.T) {
@@ -150,6 +159,24 @@ func TestAddPicture(t *testing.T) {
 	}
 	// Test add picture to worksheet with unsupport file type.
 	err = xlsx.AddPicture("Sheet1", "G21", "./test/Book1.xlsx", "")
+	if err != nil {
+		t.Log(err)
+	}
+	err = xlsx.AddPictureFromBytes("Sheet1", "G21", "", "Excel Logo", "jpg", make([]byte, 1))
+	if err != nil {
+		t.Log(err)
+	}
+	// Test add picture to worksheet with invalid file data.
+	err = xlsx.AddPictureFromBytes("Sheet1", "G21", "", "Excel Logo", ".jpg", make([]byte, 1))
+	if err != nil {
+		t.Log(err)
+	}
+	file, err := ioutil.ReadFile("./test/images/excel.jpg")
+	if err != nil {
+		t.Error(err)
+	}
+	// Test add picture to worksheet from bytes.
+	err = xlsx.AddPictureFromBytes("Sheet1", "Q1", "", "Excel Logo", ".jpg", file)
 	if err != nil {
 		t.Log(err)
 	}
@@ -202,9 +229,15 @@ func TestNewFile(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	// Test add picture to worksheet without formatset.
 	err = xlsx.AddPicture("Sheet1", "C2", "./test/images/excel.png", "")
 	if err != nil {
 		t.Error(err)
+	}
+	// Test add picture to worksheet with invalid formatset.
+	err = xlsx.AddPicture("Sheet1", "C2", "./test/images/excel.png", `{`)
+	if err != nil {
+		t.Log(err)
 	}
 	err = xlsx.SaveAs("./test/Book3.xlsx")
 	if err != nil {
@@ -642,6 +675,7 @@ func TestSetDeleteSheet(t *testing.T) {
 		t.Error(err)
 	}
 	xlsx.DeleteSheet("Sheet1")
+	xlsx.AddComment("Sheet1", "A1", "")
 	xlsx.AddComment("Sheet1", "A1", `{"author":"Excelize: ","text":"This is a comment."}`)
 	err = xlsx.SaveAs("./test/Book_delete_sheet.xlsx")
 	if err != nil {
@@ -756,9 +790,18 @@ func TestAddTable(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	xlsx.AddTable("Sheet1", "B26", "A21", ``)
-	xlsx.AddTable("Sheet2", "A2", "B5", `{"table_name":"table","table_style":"TableStyleMedium2", "show_first_column":true,"show_last_column":true,"show_row_stripes":false,"show_column_stripes":true}`)
-	xlsx.AddTable("Sheet2", "F1", "F1", `{"table_style":"TableStyleMedium8"}`)
+	err = xlsx.AddTable("Sheet1", "B26", "A21", `{}`)
+	if err != nil {
+		t.Error(err)
+	}
+	err = xlsx.AddTable("Sheet2", "A2", "B5", `{"table_name":"table","table_style":"TableStyleMedium2", "show_first_column":true,"show_last_column":true,"show_row_stripes":false,"show_column_stripes":true}`)
+	if err != nil {
+		t.Error(err)
+	}
+	err = xlsx.AddTable("Sheet2", "F1", "F1", `{"table_style":"TableStyleMedium8"}`)
+	if err != nil {
+		t.Error(err)
+	}
 	err = xlsx.Save()
 	if err != nil {
 		t.Error(err)
@@ -774,6 +817,7 @@ func TestAddShape(t *testing.T) {
 	xlsx.AddShape("Sheet1", "B30", `{"type":"rect","paragraph":[{"text":"Rectangle"},{}]}`)
 	xlsx.AddShape("Sheet1", "C30", `{"type":"rect","paragraph":[]}`)
 	xlsx.AddShape("Sheet3", "H1", `{"type":"ellipseRibbon", "color":{"line":"#4286f4","fill":"#8eb9ff"}, "paragraph":[{"font":{"bold":true,"italic":true,"family":"Berlin Sans FB Demi","size":36,"color":"#777777","underline":"single"}}], "height": 90}`)
+	xlsx.AddShape("Sheet3", "H1", "")
 	err = xlsx.Save()
 	if err != nil {
 		t.Error(err)
@@ -792,6 +836,11 @@ func TestAddComments(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	allComments := xlsx.GetComments()
+	if len(allComments) != 2 {
+		t.Error("Expected 2 comment entry elements.")
+	}
+
 }
 
 func TestAutoFilter(t *testing.T) {
@@ -837,6 +886,7 @@ func TestAddChart(t *testing.T) {
 	for k, v := range values {
 		xlsx.SetCellValue("Sheet1", k, v)
 	}
+	xlsx.AddChart("Sheet1", "P1", "")
 	xlsx.AddChart("Sheet1", "P1", `{"type":"col","series":[{"name":"Sheet1!$A$30","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$30:$D$30"},{"name":"Sheet1!$A$31","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$31:$D$31"},{"name":"Sheet1!$A$32","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$32:$D$32"}],"format":{"x_scale":1.0,"y_scale":1.0,"x_offset":15,"y_offset":10,"print_obj":true,"lock_aspect_ratio":false,"locked":false},"legend":{"position":"left","show_legend_key":false},"title":{"name":"Fruit 2D Column Chart"},"plotarea":{"show_bubble_size":true,"show_cat_name":false,"show_leader_lines":false,"show_percent":true,"show_series_name":true,"show_val":true},"show_blanks_as":"zero"}`)
 	xlsx.AddChart("Sheet1", "X1", `{"type":"colStacked","series":[{"name":"Sheet1!$A$30","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$30:$D$30"},{"name":"Sheet1!$A$31","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$31:$D$31"},{"name":"Sheet1!$A$32","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$32:$D$32"}],"format":{"x_scale":1.0,"y_scale":1.0,"x_offset":15,"y_offset":10,"print_obj":true,"lock_aspect_ratio":false,"locked":false},"legend":{"position":"left","show_legend_key":false},"title":{"name":"Fruit 2D Stacked Column Chart"},"plotarea":{"show_bubble_size":true,"show_cat_name":false,"show_leader_lines":false,"show_percent":true,"show_series_name":true,"show_val":true},"show_blanks_as":"zero"}`)
 	xlsx.AddChart("Sheet1", "P16", `{"type":"colPercentStacked","series":[{"name":"Sheet1!$A$30","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$30:$D$30"},{"name":"Sheet1!$A$31","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$31:$D$31"},{"name":"Sheet1!$A$32","categories":"Sheet1!$B$29:$D$29","values":"Sheet1!$B$32:$D$32"}],"format":{"x_scale":1.0,"y_scale":1.0,"x_offset":15,"y_offset":10,"print_obj":true,"lock_aspect_ratio":false,"locked":false},"legend":{"position":"left","show_legend_key":false},"title":{"name":"Fruit 100% Stacked Column Chart"},"plotarea":{"show_bubble_size":true,"show_cat_name":false,"show_leader_lines":false,"show_percent":true,"show_series_name":true,"show_val":true},"show_blanks_as":"zero"}`)
@@ -928,6 +978,7 @@ func TestSetPane(t *testing.T) {
 	xlsx.SetPanes("Panes 3", `{"freeze":false,"split":true,"x_split":3270,"y_split":1800,"top_left_cell":"N57","active_pane":"bottomLeft","panes":[{"sqref":"I36","active_cell":"I36"},{"sqref":"G33","active_cell":"G33","pane":"topRight"},{"sqref":"J60","active_cell":"J60","pane":"bottomLeft"},{"sqref":"O60","active_cell":"O60","pane":"bottomRight"}]}`)
 	xlsx.NewSheet("Panes 4")
 	xlsx.SetPanes("Panes 4", `{"freeze":true,"split":false,"x_split":0,"y_split":9,"top_left_cell":"A34","active_pane":"bottomLeft","panes":[{"sqref":"A11:XFD11","active_cell":"A11","pane":"bottomLeft"}]}`)
+	xlsx.SetPanes("Panes 4", "")
 	err := xlsx.SaveAs("./test/Book_set_panes.xlsx")
 	if err != nil {
 		t.Error(err)
@@ -1001,6 +1052,8 @@ func TestConditionalFormat(t *testing.T) {
 	xlsx.SetConditionalFormat("Sheet1", "K1:K10", `[{"type":"data_bar", "criteria":"=", "min_type":"min","max_type":"max","bar_color":"#638EC6"}]`)
 	// Use a formula to determine which cells to format.
 	xlsx.SetConditionalFormat("Sheet1", "L1:L10", fmt.Sprintf(`[{"type":"formula", "criteria":"L2<3", "format":%d}]`, format1))
+	// Test set invalid format set in conditional format
+	xlsx.SetConditionalFormat("Sheet1", "L1:L10", "")
 	err = xlsx.SaveAs("./test/Book_conditional_format.xlsx")
 	if err != nil {
 		t.Log(err)
@@ -1115,6 +1168,31 @@ func TestOutlineLevel(t *testing.T) {
 		return
 	}
 	xlsx.SetColOutlineLevel("Sheet2", "B", 2)
+}
+
+func TestThemeColor(t *testing.T) {
+	t.Log(ThemeColor("000000", -0.1))
+	t.Log(ThemeColor("000000", 0))
+	t.Log(ThemeColor("000000", 1))
+}
+
+func TestHSL(t *testing.T) {
+	var hsl HSL
+	t.Log(hsl.RGBA())
+	t.Log(hslModel(hsl))
+	t.Log(hslModel(color.Gray16{Y: uint16(1)}))
+	t.Log(HSLToRGB(0, 1, 0.4))
+	t.Log(HSLToRGB(0, 1, 0.6))
+	t.Log(hueToRGB(0, 0, -1))
+	t.Log(hueToRGB(0, 0, 2))
+	t.Log(hueToRGB(0, 0, 1.0/7))
+	t.Log(hueToRGB(0, 0, 0.4))
+	t.Log(hueToRGB(0, 0, 2.0/4))
+	t.Log(RGBToHSL(255, 255, 0))
+	t.Log(RGBToHSL(0, 255, 255))
+	t.Log(RGBToHSL(250, 100, 50))
+	t.Log(RGBToHSL(50, 100, 250))
+	t.Log(RGBToHSL(250, 50, 100))
 }
 
 func trimSliceSpace(s []string) []string {

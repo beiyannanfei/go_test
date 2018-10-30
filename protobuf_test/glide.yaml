@@ -1,0 +1,7 @@
+package: github.com/beiyannanfei/go_test/protobuf_test
+import:
+- package: github.com/golang/protobuf
+  version: ~1.2.0
+  subpackages:
+  - protoc-gen-go
+  - proto
