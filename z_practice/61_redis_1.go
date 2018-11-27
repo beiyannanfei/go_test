@@ -27,4 +27,7 @@ func main() {
 	if err == redis.Nil {
 		fmt.Println("key is not exists")
 	}
+	if err != nil {
+		fmt.Println("redis err: ", err)
+	}
 }

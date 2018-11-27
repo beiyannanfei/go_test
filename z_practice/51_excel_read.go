@@ -23,12 +23,12 @@ func main() {
 	fmt.Println("cellValue_sheet1_b2:", cellValue_sheet1_b2)
 
 	allSheet := xlsx.GetSheetMap()
-	fmt.Printf("allSheet: %v\n", allSheet)
+	fmt.Printf("allSheet: %v, count: %v\n", allSheet, len(allSheet))
 
 	rows := xlsx.GetRows(allSheet[1])
 	for _, row := range rows {
-		for _, colCell := range row {
-			fmt.Print(colCell, "\t")
+		for idxCell, colCell := range row {
+			fmt.Print(idxCell, colCell, "\t")
 		}
 		fmt.Println()
 	}

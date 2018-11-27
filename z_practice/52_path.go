@@ -3,6 +3,7 @@ package main
 import (
 	"path"
 	"fmt"
+	"strings"
 )
 
 func isAbs() {
@@ -17,10 +18,15 @@ func isAbs() {
 }
 
 func split() {
-	pathStr := "a/b/c/d.txt"
-
+	pathStr := "/10113 "
+	fmt.Println(path.Base(pathStr))
 }
 
 func main() {
 	isAbs()
+	split()
+	filename := "templates/achievement.xlsx"
+	fmt.Println(path.Base(filename))
+	fmt.Println(path.Ext(filename))
+	fmt.Println(strings.TrimRight(path.Base(filename), path.Ext(filename)))
 }

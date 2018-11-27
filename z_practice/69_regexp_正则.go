@@ -6,10 +6,11 @@ import (
 	"regexp"
 	"fmt"
 	"os"
+	"reflect"
 )
 
 func IsIp(ip string) bool {
-	regexpReguler := "^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$"
+	regexpReguler := `^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$`
 	if m, _ := regexp.MatchString(regexpReguler, ip); !m {
 		return false
 	}
