@@ -1,0 +1,16 @@
+hash: 7276056c43dcb335f04a9238aeb05b2c4d5d02ea970a963f3fd344ca680c02fe
+updated: 2018-11-27T10:19:43.662053+08:00
+imports:
+- name: github.com/golang/freetype
+  version: e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4
+  subpackages:
+  - raster
+  - truetype
+- name: github.com/mojocn/base64Captcha
+  version: 7d0b78ad1685f79a0fea381c107d77ec1f812500
+- name: golang.org/x/image
+  version: cd38e8056d9b27bb2f265effa37fb0ea6b8a7f0f
+  subpackages:
+  - font
+  - math/fixed
+testImports: []

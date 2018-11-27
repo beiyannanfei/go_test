@@ -1,0 +1,4 @@
+package: github.com/beiyannanfei/go_test/图片验证码
+import:
+- package: github.com/mojocn/base64Captcha
+  version: ~1.9.0
