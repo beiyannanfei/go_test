@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"fmt"
 	"encoding/xml"
+	"reflect"
 )
 
 func main() {
@@ -34,6 +35,7 @@ func parseXML(xmlStr string) {
 	err := xml.Unmarshal([]byte(xmlStr), &v)
 	fmt.Println(err)
 	fmt.Println(v)
+	fmt.Println(v.Message.Amount)
 }
 
 func decode(str string, key string) string {
@@ -42,14 +44,87 @@ func decode(str string, key string) string {
 	keysByte := []byte(key)
 	var dataByte []byte
 
-	for i := 0; i < len(list); i++ {
+	/*for i := 0; i < len(list); i++ {
 		l, _ := strconv.Atoi(list[i])
 		lu := byte(l)
 		k := keysByte[i%len(keysByte)]
 		cha := lu - k
 		//fmt.Println(l, reflect.TypeOf(l), lu, reflect.TypeOf(lu), k, reflect.TypeOf(k), cha, reflect.TypeOf(cha))
 		dataByte = append(dataByte, cha)
+	}*/
+
+	for i := 0; i < len(list); i++ {
+		l, _ := strconv.Atoi(list[i])
+		k := keysByte[i%len(keysByte)]
+		cha := l - int(k)
+		fmt.Println(l, reflect.TypeOf(l), k, reflect.TypeOf(k), cha, reflect.TypeOf(cha))
+		dataByte = append(dataByte, byte(cha))
 	}
+
 	//fmt.Println(string(dataByte))
 	return string(dataByte)
 }
+
+//package quick
+//
+//import (
+//	"strconv"
+//	"strings"
+//)
+//
+///**
+//QuickSDK游戏同步加解密算法描述
+//解密方法
+//strEncode 密文
+//keys 解密密钥 为游戏接入时分配的 callback_key
+//*/
+//func Decode(str string, keys string) string {
+//
+//	strs := strings.Split(str, "@")
+//	strs = strs[1:]
+//
+//	keysNum := GetBytes(keys)
+//
+//	_data := []int{}
+//	_len := len(keysNum)
+//
+//	for i, v := range strs {
+//
+//		keyVar := keysNum[i%_len]
+//		kn, _ := strconv.Atoi(v)
+//		_data = append(_data, kn-0xff&keyVar)
+//	}
+//
+//	return ToStr(_data)
+//
+//}
+//
+///**
+//* 转成字符数据
+//*/
+//func GetBytes(strs string) []int {
+//
+//	_keys := []byte(strs)
+//	keysNum := []int{}
+//	for _, _n := range _keys {
+//
+//		num := int(_n)
+//		keysNum = append(keysNum, num)
+//	}
+//
+//	return keysNum
+//}
+//
+///**
+//* 转化字符串
+//*/
+//func ToStr(keysNum []int) string {
+//
+//	_b := []string{}
+//	for _, v := range keysNum {
+//
+//		_b = append(_b, string(v))
+//	}
+//
+//	return strings.Join(_b, "")
+//}

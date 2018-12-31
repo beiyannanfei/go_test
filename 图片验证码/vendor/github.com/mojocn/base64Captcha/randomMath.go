@@ -45,7 +45,7 @@ func randArithmetic() (question, result string) {
 		}
 	}
 	fmt.Println("==================== question: ", question)
-	fmt.Println("==================== result: ", result)
+	fmt.Println("==================== mathResult: ", mathResult)
 	result = fmt.Sprintf("%d", mathResult)
 	return
 }
