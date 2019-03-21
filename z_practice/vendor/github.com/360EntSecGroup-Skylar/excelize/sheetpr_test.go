@@ -2,11 +2,12 @@ package excelize_test
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
-	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/mohae/deepcopy"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/360EntSecGroup-Skylar/excelize"
 )
 
 var _ = []excelize.SheetPrOption{
@@ -15,6 +16,7 @@ var _ = []excelize.SheetPrOption{
 	excelize.Published(false),
 	excelize.FitToPage(true),
 	excelize.AutoPageBreaks(true),
+	excelize.OutlineSummaryBelow(true),
 }
 
 var _ = []excelize.SheetPrOptionPtr{
@@ -23,6 +25,7 @@ var _ = []excelize.SheetPrOptionPtr{
 	(*excelize.Published)(nil),
 	(*excelize.FitToPage)(nil),
 	(*excelize.AutoPageBreaks)(nil),
+	(*excelize.OutlineSummaryBelow)(nil),
 }
 
 func ExampleFile_SetSheetPrOptions() {
@@ -35,6 +38,7 @@ func ExampleFile_SetSheetPrOptions() {
 		excelize.Published(false),
 		excelize.FitToPage(true),
 		excelize.AutoPageBreaks(true),
+		excelize.OutlineSummaryBelow(false),
 	); err != nil {
 		panic(err)
 	}
@@ -51,6 +55,7 @@ func ExampleFile_GetSheetPrOptions() {
 		published                         excelize.Published
 		fitToPage                         excelize.FitToPage
 		autoPageBreaks                    excelize.AutoPageBreaks
+		outlineSummaryBelow               excelize.OutlineSummaryBelow
 	)
 
 	if err := xl.GetSheetPrOptions(sheet,
@@ -59,6 +64,7 @@ func ExampleFile_GetSheetPrOptions() {
 		&published,
 		&fitToPage,
 		&autoPageBreaks,
+		&outlineSummaryBelow,
 	); err != nil {
 		panic(err)
 	}
@@ -68,6 +74,7 @@ func ExampleFile_GetSheetPrOptions() {
 	fmt.Println("- published:", published)
 	fmt.Println("- fitToPage:", fitToPage)
 	fmt.Println("- autoPageBreaks:", autoPageBreaks)
+	fmt.Println("- outlineSummaryBelow:", outlineSummaryBelow)
 	// Output:
 	// Defaults:
 	// - codeName: ""
@@ -75,11 +82,13 @@ func ExampleFile_GetSheetPrOptions() {
 	// - published: true
 	// - fitToPage: false
 	// - autoPageBreaks: false
+	// - outlineSummaryBelow: true
 }
 
 func TestSheetPrOptions(t *testing.T) {
 	const sheet = "Sheet1"
-	for _, test := range []struct {
+
+	testData := []struct {
 		container  excelize.SheetPrOptionPtr
 		nonDefault excelize.SheetPrOption
 	}{
@@ -88,66 +97,70 @@ func TestSheetPrOptions(t *testing.T) {
 		{new(excelize.Published), excelize.Published(false)},
 		{new(excelize.FitToPage), excelize.FitToPage(true)},
 		{new(excelize.AutoPageBreaks), excelize.AutoPageBreaks(true)},
-	} {
-		opt := test.nonDefault
-		t.Logf("option %T", opt)
+		{new(excelize.OutlineSummaryBelow), excelize.OutlineSummaryBelow(false)},
+	}
 
-		def := deepcopy.Copy(test.container).(excelize.SheetPrOptionPtr)
-		val1 := deepcopy.Copy(def).(excelize.SheetPrOptionPtr)
-		val2 := deepcopy.Copy(def).(excelize.SheetPrOptionPtr)
+	for i, test := range testData {
+		t.Run(fmt.Sprintf("TestData%d", i), func(t *testing.T) {
 
-		xl := excelize.NewFile()
-		// Get the default value
-		if err := xl.GetSheetPrOptions(sheet, def); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		// Get again and check
-		if err := xl.GetSheetPrOptions(sheet, val1); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		if !reflect.DeepEqual(val1, def) {
-			t.Fatalf("%T: value should not have changed", opt)
-		}
-		// Set the same value
-		if err := xl.SetSheetPrOptions(sheet, val1); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		// Get again and check
-		if err := xl.GetSheetPrOptions(sheet, val1); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		if !reflect.DeepEqual(val1, def) {
-			t.Fatalf("%T: value should not have changed", opt)
-		}
+			opt := test.nonDefault
+			t.Logf("option %T", opt)
 
-		// Set a different value
-		if err := xl.SetSheetPrOptions(sheet, test.nonDefault); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		if err := xl.GetSheetPrOptions(sheet, val1); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		// Get again and compare
-		if err := xl.GetSheetPrOptions(sheet, val2); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		if !reflect.DeepEqual(val2, val1) {
-			t.Fatalf("%T: value should not have changed", opt)
-		}
-		// Value should not be the same as the default
-		if reflect.DeepEqual(val1, def) {
-			t.Fatalf("%T: value should have changed from default", opt)
-		}
+			def := deepcopy.Copy(test.container).(excelize.SheetPrOptionPtr)
+			val1 := deepcopy.Copy(def).(excelize.SheetPrOptionPtr)
+			val2 := deepcopy.Copy(def).(excelize.SheetPrOptionPtr)
 
-		// Restore the default value
-		if err := xl.SetSheetPrOptions(sheet, def); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		if err := xl.GetSheetPrOptions(sheet, val1); err != nil {
-			t.Fatalf("%T: %s", opt, err)
-		}
-		if !reflect.DeepEqual(val1, def) {
-			t.Fatalf("%T: value should now be the same as default", opt)
-		}
+			xl := excelize.NewFile()
+			// Get the default value
+			if !assert.NoError(t, xl.GetSheetPrOptions(sheet, def), opt) {
+				t.FailNow()
+			}
+			// Get again and check
+			if !assert.NoError(t, xl.GetSheetPrOptions(sheet, val1), opt) {
+				t.FailNow()
+			}
+			if !assert.Equal(t, val1, def, opt) {
+				t.FailNow()
+			}
+			// Set the same value
+			if !assert.NoError(t, xl.SetSheetPrOptions(sheet, val1), opt) {
+				t.FailNow()
+			}
+			// Get again and check
+			if !assert.NoError(t, xl.GetSheetPrOptions(sheet, val1), opt) {
+				t.FailNow()
+			}
+			if !assert.Equal(t, val1, def, "%T: value should not have changed", opt) {
+				t.FailNow()
+			}
+			// Set a different value
+			if !assert.NoError(t, xl.SetSheetPrOptions(sheet, test.nonDefault), opt) {
+				t.FailNow()
+			}
+			if !assert.NoError(t, xl.GetSheetPrOptions(sheet, val1), opt) {
+				t.FailNow()
+			}
+			// Get again and compare
+			if !assert.NoError(t, xl.GetSheetPrOptions(sheet, val2), opt) {
+				t.FailNow()
+			}
+			if !assert.Equal(t, val1, val2, "%T: value should not have changed", opt) {
+				t.FailNow()
+			}
+			// Value should not be the same as the default
+			if !assert.NotEqual(t, def, val1, "%T: value should have changed from default", opt) {
+				t.FailNow()
+			}
+			// Restore the default value
+			if !assert.NoError(t, xl.SetSheetPrOptions(sheet, def), opt) {
+				t.FailNow()
+			}
+			if !assert.NoError(t, xl.GetSheetPrOptions(sheet, val1), opt) {
+				t.FailNow()
+			}
+			if !assert.Equal(t, def, val1) {
+				t.FailNow()
+			}
+		})
 	}
 }

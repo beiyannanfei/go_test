@@ -1,4 +1,4 @@
-// Copyright 2016 - 2018 The excelize Authors. All rights reserved. Use of
+// Copyright 2016 - 2019 The excelize Authors. All rights reserved. Use of
 // this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 //
@@ -14,9 +14,11 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -24,26 +26,35 @@ import (
 	"github.com/mohae/deepcopy"
 )
 
-// NewSheet provides a function to create a new sheet by given worksheet name,
-// when creating a new XLSX file, the default sheet will be create, when you
-// create a new file.
+// NewSheet provides function to create a new sheet by given worksheet name.
+// When creating a new XLSX file, the default sheet will be created. Returns
+// the number of sheets in the workbook (file) after appending the new sheet.
 func (f *File) NewSheet(name string) int {
 	// Check if the worksheet already exists
 	if f.GetSheetIndex(name) != 0 {
 		return f.SheetCount
 	}
+	f.DeleteSheet(name)
 	f.SheetCount++
+	wb := f.workbookReader()
+	sheetID := 0
+	for _, v := range wb.Sheets.Sheet {
+		if v.SheetID > sheetID {
+			sheetID = v.SheetID
+		}
+	}
+	sheetID++
 	// Update docProps/app.xml
 	f.setAppXML()
 	// Update [Content_Types].xml
-	f.setContentTypes(f.SheetCount)
+	f.setContentTypes(sheetID)
 	// Create new sheet /xl/worksheets/sheet%d.xml
-	f.setSheet(f.SheetCount, name)
+	f.setSheet(sheetID, name)
 	// Update xl/_rels/workbook.xml.rels
-	rID := f.addXlsxWorkbookRels(f.SheetCount)
+	rID := f.addXlsxWorkbookRels(sheetID)
 	// Update xl/workbook.xml
-	f.setWorkbook(name, rID)
-	return f.SheetCount
+	f.setWorkbook(name, sheetID, rID)
+	return sheetID
 }
 
 // contentTypesReader provides a function to get the pointer to the
@@ -51,7 +62,7 @@ func (f *File) NewSheet(name string) int {
 func (f *File) contentTypesReader() *xlsxTypes {
 	if f.ContentTypes == nil {
 		var content xlsxTypes
-		_ = xml.Unmarshal([]byte(f.readXML("[Content_Types].xml")), &content)
+		_ = xml.Unmarshal(namespaceStrictToTransitional(f.readXML("[Content_Types].xml")), &content)
 		f.ContentTypes = &content
 	}
 	return f.ContentTypes
@@ -71,7 +82,7 @@ func (f *File) contentTypesWriter() {
 func (f *File) workbookReader() *xlsxWorkbook {
 	if f.WorkBook == nil {
 		var content xlsxWorkbook
-		_ = xml.Unmarshal([]byte(f.readXML("xl/workbook.xml")), &content)
+		_ = xml.Unmarshal(namespaceStrictToTransitional(f.readXML("xl/workbook.xml")), &content)
 		f.WorkBook = &content
 	}
 	return f.WorkBook
@@ -117,7 +128,8 @@ func trimCell(column []xlsxC) []xlsxC {
 	return col[0:i]
 }
 
-// Read and update property of contents type of XLSX.
+// setContentTypes provides a function to read and update property of contents
+// type of XLSX.
 func (f *File) setContentTypes(index int) {
 	content := f.contentTypesReader()
 	content.Overrides = append(content.Overrides, xlsxOverride{
@@ -126,7 +138,7 @@ func (f *File) setContentTypes(index int) {
 	})
 }
 
-// Update sheet property by given index.
+// setSheet provides a function to update sheet property by given index.
 func (f *File) setSheet(index int, name string) {
 	var xlsx xlsxWorksheet
 	xlsx.Dimension.Ref = "A1"
@@ -140,19 +152,11 @@ func (f *File) setSheet(index int, name string) {
 
 // setWorkbook update workbook property of XLSX. Maximum 31 characters are
 // allowed in sheet title.
-func (f *File) setWorkbook(name string, rid int) {
+func (f *File) setWorkbook(name string, sheetID, rid int) {
 	content := f.workbookReader()
-	rID := 0
-	for _, v := range content.Sheets.Sheet {
-		t, _ := strconv.Atoi(v.SheetID)
-		if t > rID {
-			rID = t
-		}
-	}
-	rID++
 	content.Sheets.Sheet = append(content.Sheets.Sheet, xlsxSheet{
 		Name:    trimSheetName(name),
-		SheetID: strconv.Itoa(rID),
+		SheetID: sheetID,
 		ID:      "rId" + strconv.Itoa(rid),
 	})
 }
@@ -162,7 +166,7 @@ func (f *File) setWorkbook(name string, rid int) {
 func (f *File) workbookRelsReader() *xlsxWorkbookRels {
 	if f.WorkBookRels == nil {
 		var content xlsxWorkbookRels
-		_ = xml.Unmarshal([]byte(f.readXML("xl/_rels/workbook.xml.rels")), &content)
+		_ = xml.Unmarshal(namespaceStrictToTransitional(f.readXML("xl/_rels/workbook.xml.rels")), &content)
 		f.WorkBookRels = &content
 	}
 	return f.WorkBookRels
@@ -208,39 +212,44 @@ func (f *File) setAppXML() {
 	f.saveFileList("docProps/app.xml", []byte(templateDocpropsApp))
 }
 
-// Some tools that read XLSX files have very strict requirements about the
-// structure of the input XML. In particular both Numbers on the Mac and SAS
-// dislike inline XML namespace declarations, or namespace prefixes that don't
-// match the ones that Excel itself uses. This is a problem because the Go XML
-// library doesn't multiple namespace declarations in a single element of a
-// document. This function is a horrible hack to fix that after the XML
-// marshalling is completed.
+// replaceRelationshipsNameSpaceBytes; Some tools that read XLSX files have
+// very strict requirements about the structure of the input XML. In
+// particular both Numbers on the Mac and SAS dislike inline XML namespace
+// declarations, or namespace prefixes that don't match the ones that Excel
+// itself uses. This is a problem because the Go XML library doesn't multiple
+// namespace declarations in a single element of a document. This function is
+// a horrible hack to fix that after the XML marshalling is completed.
 func replaceRelationshipsNameSpaceBytes(workbookMarshal []byte) []byte {
 	oldXmlns := []byte(`<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">`)
 	newXmlns := []byte(`<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x15" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main">`)
 	return bytes.Replace(workbookMarshal, oldXmlns, newXmlns, -1)
 }
 
-// SetActiveSheet provides a function to set default active worksheet of XLSX by
-// given index. Note that active index is different with the index that got by
-// function GetSheetMap, and it should be greater than 0 and less than total
+// SetActiveSheet provides function to set default active worksheet of XLSX by
+// given index. Note that active index is different from the index returned by
+// function GetSheetMap(). It should be greater than 0 and less than total
 // worksheet numbers.
 func (f *File) SetActiveSheet(index int) {
 	if index < 1 {
 		index = 1
 	}
-	index--
-	content := f.workbookReader()
-	if len(content.BookViews.WorkBookView) > 0 {
-		content.BookViews.WorkBookView[0].ActiveTab = index
-	} else {
-		content.BookViews.WorkBookView = append(content.BookViews.WorkBookView, xlsxWorkBookView{
-			ActiveTab: index,
-		})
+	wb := f.workbookReader()
+	for activeTab, sheet := range wb.Sheets.Sheet {
+		if sheet.SheetID == index {
+			if len(wb.BookViews.WorkBookView) > 0 {
+				wb.BookViews.WorkBookView[0].ActiveTab = activeTab
+			} else {
+				wb.BookViews.WorkBookView = append(wb.BookViews.WorkBookView, xlsxWorkBookView{
+					ActiveTab: activeTab,
+				})
+			}
+		}
 	}
-	index++
 	for idx, name := range f.GetSheetMap() {
 		xlsx := f.workSheetReader(name)
+		if len(xlsx.SheetViews.SheetView) > 0 {
+			xlsx.SheetViews.SheetView[0].TabSelected = false
+		}
 		if index == idx {
 			if len(xlsx.SheetViews.SheetView) > 0 {
 				xlsx.SheetViews.SheetView[0].TabSelected = true
@@ -249,32 +258,20 @@ func (f *File) SetActiveSheet(index int) {
 					TabSelected: true,
 				})
 			}
-		} else {
-			if len(xlsx.SheetViews.SheetView) > 0 {
-				xlsx.SheetViews.SheetView[0].TabSelected = false
-			}
 		}
 	}
 }
 
-// GetActiveSheetIndex provides a function to get active sheet of XLSX. If not
-// found the active sheet will be return integer 0.
+// GetActiveSheetIndex provides a function to get active sheet index of the
+// XLSX. If not found the active sheet will be return integer 0.
 func (f *File) GetActiveSheetIndex() int {
-	buffer := bytes.Buffer{}
-	content := f.workbookReader()
-	for _, v := range content.Sheets.Sheet {
-		xlsx := xlsxWorksheet{}
-		buffer.WriteString("xl/worksheets/sheet")
-		buffer.WriteString(strings.TrimPrefix(v.ID, "rId"))
-		buffer.WriteString(".xml")
-		_ = xml.Unmarshal([]byte(f.readXML(buffer.String())), &xlsx)
+	for idx, name := range f.GetSheetMap() {
+		xlsx := f.workSheetReader(name)
 		for _, sheetView := range xlsx.SheetViews.SheetView {
 			if sheetView.TabSelected {
-				ID, _ := strconv.Atoi(strings.TrimPrefix(v.ID, "rId"))
-				return ID
+				return idx
 			}
 		}
-		buffer.Reset()
 	}
 	return 0
 }
@@ -352,8 +349,9 @@ func (f *File) GetSheetMap() map[int]string {
 	sheetMap := map[int]string{}
 	for _, v := range content.Sheets.Sheet {
 		for _, rel := range rels.Relationships {
-			if rel.ID == v.ID {
-				rID, _ := strconv.Atoi(strings.TrimSuffix(strings.TrimPrefix(rel.Target, "worksheets/sheet"), ".xml"))
+			relStr := strings.SplitN(rel.Target, "worksheets/sheet", 2)
+			if rel.ID == v.ID && len(relStr) == 2 {
+				rID, _ := strconv.Atoi(strings.TrimSuffix(relStr[1], ".xml"))
 				sheetMap[rID] = v.Name
 			}
 		}
@@ -402,8 +400,8 @@ func (f *File) DeleteSheet(name string) {
 	for k, v := range content.Sheets.Sheet {
 		if v.Name == trimSheetName(name) && len(content.Sheets.Sheet) > 1 {
 			content.Sheets.Sheet = append(content.Sheets.Sheet[:k], content.Sheets.Sheet[k+1:]...)
-			sheet := "xl/worksheets/sheet" + strings.TrimPrefix(v.ID, "rId") + ".xml"
-			rels := "xl/worksheets/_rels/sheet" + strings.TrimPrefix(v.ID, "rId") + ".xml.rels"
+			sheet := "xl/worksheets/sheet" + strconv.Itoa(v.SheetID) + ".xml"
+			rels := "xl/worksheets/_rels/sheet" + strconv.Itoa(v.SheetID) + ".xml.rels"
 			target := f.deleteSheetFromWorkbookRels(v.ID)
 			f.deleteSheetFromContentTypes(target)
 			delete(f.sheetMap, name)
@@ -658,6 +656,120 @@ func (f *File) GetSheetVisible(name string) bool {
 		}
 	}
 	return visible
+}
+
+// SearchSheet provides a function to get coordinates by given worksheet name,
+// cell value, and regular expression. The function doesn't support searching
+// on the calculated result, formatted numbers and conditional lookup
+// currently. If it is a merged cell, it will return the coordinates of the
+// upper left corner of the merged area.
+//
+// An example of search the coordinates of the value of "100" on Sheet1:
+//
+//    xlsx.SearchSheet("Sheet1", "100")
+//
+// An example of search the coordinates where the numerical value in the range
+// of "0-9" of Sheet1 is described:
+//
+//    xlsx.SearchSheet("Sheet1", "[0-9]", true)
+//
+func (f *File) SearchSheet(sheet, value string, reg ...bool) []string {
+	var regSearch bool
+	for _, r := range reg {
+		regSearch = r
+	}
+	xlsx := f.workSheetReader(sheet)
+	result := []string{}
+	name, ok := f.sheetMap[trimSheetName(sheet)]
+	if !ok {
+		return result
+	}
+	if xlsx != nil {
+		output, _ := xml.Marshal(f.Sheet[name])
+		f.saveFileList(name, replaceWorkSheetsRelationshipsNameSpaceBytes(output))
+	}
+	xml.NewDecoder(bytes.NewReader(f.readXML(name)))
+	d := f.sharedStringsReader()
+	var inElement string
+	var r xlsxRow
+	decoder := xml.NewDecoder(bytes.NewReader(f.readXML(name)))
+	for {
+		token, _ := decoder.Token()
+		if token == nil {
+			break
+		}
+		switch startElement := token.(type) {
+		case xml.StartElement:
+			inElement = startElement.Name.Local
+			if inElement == "row" {
+				r = xlsxRow{}
+				_ = decoder.DecodeElement(&r, &startElement)
+				for _, colCell := range r.C {
+					val, _ := colCell.getValueFrom(f, d)
+					if regSearch {
+						regex := regexp.MustCompile(value)
+						if !regex.MatchString(val) {
+							continue
+						}
+					} else {
+						if val != value {
+							continue
+						}
+					}
+					result = append(result, fmt.Sprintf("%s%d", strings.Map(letterOnlyMapF, colCell.R), r.R))
+				}
+			}
+		default:
+		}
+	}
+	return result
+}
+
+// ProtectSheet provides a function to prevent other users from accidentally
+// or deliberately changing, moving, or deleting data in a worksheet. For
+// example, protect Sheet1 with protection settings:
+//
+//    xlsx.ProtectSheet("Sheet1", &excelize.FormatSheetProtection{
+//        Password:      "password",
+//        EditScenarios: false,
+//    })
+//
+func (f *File) ProtectSheet(sheet string, settings *FormatSheetProtection) {
+	xlsx := f.workSheetReader(sheet)
+	if settings == nil {
+		settings = &FormatSheetProtection{
+			EditObjects:       true,
+			EditScenarios:     true,
+			SelectLockedCells: true,
+		}
+	}
+	xlsx.SheetProtection = &xlsxSheetProtection{
+		AutoFilter:          settings.AutoFilter,
+		DeleteColumns:       settings.DeleteColumns,
+		DeleteRows:          settings.DeleteRows,
+		FormatCells:         settings.FormatCells,
+		FormatColumns:       settings.FormatColumns,
+		FormatRows:          settings.FormatRows,
+		InsertColumns:       settings.InsertColumns,
+		InsertHyperlinks:    settings.InsertHyperlinks,
+		InsertRows:          settings.InsertRows,
+		Objects:             settings.EditObjects,
+		PivotTables:         settings.PivotTables,
+		Scenarios:           settings.EditScenarios,
+		SelectLockedCells:   settings.SelectLockedCells,
+		SelectUnlockedCells: settings.SelectUnlockedCells,
+		Sheet:               true,
+		Sort:                settings.Sort,
+	}
+	if settings.Password != "" {
+		xlsx.SheetProtection.Password = genSheetPasswd(settings.Password)
+	}
+}
+
+// UnprotectSheet provides a function to unprotect an Excel worksheet.
+func (f *File) UnprotectSheet(sheet string) {
+	xlsx := f.workSheetReader(sheet)
+	xlsx.SheetProtection = nil
 }
 
 // trimSheetName provides a function to trim invaild characters by given worksheet

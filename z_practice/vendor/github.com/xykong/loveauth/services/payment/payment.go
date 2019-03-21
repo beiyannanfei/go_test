@@ -1,0 +1,7 @@
+package payment
+
+
+
+func loadTemplate() {
+
+}

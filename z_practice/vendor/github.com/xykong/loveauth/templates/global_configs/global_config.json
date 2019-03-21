@@ -1,0 +1,81 @@
+{
+  "1.0.1_1.1.0": {
+    "showServerList": false,
+    "gConfigList": [
+      {
+        "configKey": "QA验收服务器(master)",
+        "globalConfigVO": {
+          "completeBundle": -1,
+          "configUrl": "http://config.api.worldoflove.cn/loveworld/master/",
+          "accountUrl": "http://auth-beta.api.worldoflove.cn",
+          "bundleCdnUrl": "http://cos-cdn.worldoflove.cn/master/",
+          "bundleCdnUrlRaw": "",
+          "gameServerUrl": "http://182.254.147.76/",
+          "hashNameFLag": 1,
+          "resVersion": 0,
+          "gmOpen": 0,
+          "testLoginOpen": 0,
+          "avgShowTestUi": 0,
+          "usherOpen": 0,
+          "speedScaleMax": 0,
+          "forbidGuide": 1,
+          "updateFlag": 0,
+          "downloadUrl": "",
+          "announcement": 0,
+          "prefix": "announcement_"
+        }
+      },
+      {
+        "configKey": "开发服务器(develop)",
+        "globalConfigVO": {
+          "completeBundle": -1,
+          "configUrl": "http://config.api.worldoflove.cn/loveworld/develop/",
+          "accountUrl": "http://auth-beta.api.worldoflove.cn",
+          "bundleCdnUrl": "http://cos-cdn.worldoflove.cn/develop/",
+          "bundleCdnUrlRaw": "",
+          "gameServerUrl": "http://182.254.147.76/",
+          "hashNameFLag": 1,
+          "resVersion": 0,
+          "gmOpen": 0,
+          "testLoginOpen": 0,
+          "avgShowTestUi": 0,
+          "usherOpen": 0,
+          "speedScaleMax": 0,
+          "forbidGuide": 1,
+          "updateFlag": 0,
+          "downloadUrl": "",
+          "announcement": 0,
+          "prefix": "announcement_"
+        }
+      }
+    ]
+  },
+  "1.1.1_1.2.0": {
+    "showServerList": false,
+    "gConfigList": [
+      {
+        "configKey": "templateServer_0",
+        "globalConfigVO": {
+          "completeBundle": -1,
+          "configUrl": "http://config.api.worldoflove.cn/loveworld/develop/",
+          "accountUrl": "http://auth-beta.api.worldoflove.cn",
+          "bundleCdnUrl": "http://cos-cdn.worldoflove.cn/develop/",
+          "bundleCdnUrlRaw": "",
+          "gameServerUrl": "http://182.254.147.76/",
+          "hashNameFLag": 1,
+          "resVersion": 0,
+          "gmOpen": 0,
+          "testLoginOpen": 0,
+          "avgShowTestUi": 0,
+          "usherOpen": 0,
+          "speedScaleMax": 0,
+          "forbidGuide": 1,
+          "updateFlag": 0,
+          "downloadUrl": "",
+          "announcement": 0,
+          "prefix": "announcement_"
+        }
+      }
+    ]
+  }
+}

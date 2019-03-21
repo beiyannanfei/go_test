@@ -1,4 +1,4 @@
-// Copyright 2016 - 2018 The excelize Authors. All rights reserved. Use of
+// Copyright 2016 - 2019 The excelize Authors. All rights reserved. Use of
 // this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 //
@@ -151,7 +151,7 @@ type xlsxSheets struct {
 // not checked it for completeness - it does as much as I need.
 type xlsxSheet struct {
 	Name    string `xml:"name,attr,omitempty"`
-	SheetID string `xml:"sheetId,attr,omitempty"`
+	SheetID int    `xml:"sheetId,attr,omitempty"`
 	ID      string `xml:"http://schemas.openxmlformats.org/officeDocument/2006/relationships id,attr,omitempty"`
 	State   string `xml:"state,attr,omitempty"`
 }

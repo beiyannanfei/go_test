@@ -1,4 +1,4 @@
-// Copyright 2016 - 2018 The excelize Authors. All rights reserved. Use of
+// Copyright 2016 - 2019 The excelize Authors. All rights reserved. Use of
 // this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 //
@@ -31,7 +31,25 @@ type (
 	FitToPage bool
 	// AutoPageBreaks is a SheetPrOption
 	AutoPageBreaks bool
+	// OutlineSummaryBelow is an outlinePr, within SheetPr option
+	OutlineSummaryBelow bool
 )
+
+func (o OutlineSummaryBelow) setSheetPrOption(pr *xlsxSheetPr) {
+	if pr.OutlinePr == nil {
+		pr.OutlinePr = new(xlsxOutlinePr)
+	}
+	pr.OutlinePr.SummaryBelow = bool(o)
+}
+
+func (o *OutlineSummaryBelow) getSheetPrOption(pr *xlsxSheetPr) {
+	// Excel default: true
+	if pr == nil || pr.OutlinePr == nil {
+		*o = true
+		return
+	}
+	*o = OutlineSummaryBelow(defaultTrue(&pr.OutlinePr.SummaryBelow))
+}
 
 func (o CodeName) setSheetPrOption(pr *xlsxSheetPr) {
 	pr.CodeName = string(o)
@@ -115,6 +133,7 @@ func (o *AutoPageBreaks) getSheetPrOption(pr *xlsxSheetPr) {
 //   Published(bool)
 //   FitToPage(bool)
 //   AutoPageBreaks(bool)
+//   OutlineSummaryBelow(bool)
 func (f *File) SetSheetPrOptions(name string, opts ...SheetPrOption) error {
 	sheet := f.workSheetReader(name)
 	pr := sheet.SheetPr
@@ -137,6 +156,7 @@ func (f *File) SetSheetPrOptions(name string, opts ...SheetPrOption) error {
 //   Published(bool)
 //   FitToPage(bool)
 //   AutoPageBreaks(bool)
+//   OutlineSummaryBelow(bool)
 func (f *File) GetSheetPrOptions(name string, opts ...SheetPrOptionPtr) error {
 	sheet := f.workSheetReader(name)
 	pr := sheet.SheetPr

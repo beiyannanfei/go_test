@@ -1,0 +1,11 @@
+# CIDR notation IP address and prefix length, like "192.0.2.0/24" or "2001:db8::/32", as defined in RFC 4632 and RFC 4291.
+ip:
+  - 219.141.227.166 # ip at 部落方舟
+#  - 8.8.8.8/24   # CIDR demo
+#  - 10.0.0.1/24  # CIDR demo
+#  - 127.0.0.1  # IPv4
+#  - ::1        # IPv6
+version: []
+#  - "1.1.12172"
+
+mobiles: []

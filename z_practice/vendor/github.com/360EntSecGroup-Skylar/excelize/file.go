@@ -1,4 +1,4 @@
-// Copyright 2016 - 2018 The excelize Authors. All rights reserved. Use of
+// Copyright 2016 - 2019 The excelize Authors. All rights reserved. Use of
 // this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 //
@@ -76,6 +76,15 @@ func (f *File) Write(w io.Writer) error {
 
 // WriteTo implements io.WriterTo to write the file.
 func (f *File) WriteTo(w io.Writer) (int64, error) {
+	buf, err := f.WriteToBuffer()
+	if err != nil {
+		return 0, err
+	}
+	return buf.WriteTo(w)
+}
+
+// WriteToBuffer provides a function to get bytes.Buffer from the saved file.
+func (f *File) WriteToBuffer() (*bytes.Buffer, error) {
 	buf := new(bytes.Buffer)
 	zw := zip.NewWriter(buf)
 	f.contentTypesWriter()
@@ -86,17 +95,12 @@ func (f *File) WriteTo(w io.Writer) (int64, error) {
 	for path, content := range f.XLSX {
 		fi, err := zw.Create(path)
 		if err != nil {
-			return 0, err
+			return buf, err
 		}
 		_, err = fi.Write(content)
 		if err != nil {
-			return 0, err
+			return buf, err
 		}
 	}
-	err := zw.Close()
-	if err != nil {
-		return 0, err
-	}
-
-	return buf.WriteTo(w)
+	return buf, zw.Close()
 }

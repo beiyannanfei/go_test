@@ -1,0 +1,181 @@
+hash: 1b7e7275e736575ab1a21aa1396d90a1a6a0939ebfebc040d7be5d4488092fed
+updated: 2018-12-11T10:42:52.300835+08:00
+imports:
+- name: github.com/adamzy/cedar-go
+  version: 80a9c64b256db37ac20aff007907c649afb714f1
+- name: github.com/beiyannanfei/base64Captcha
+  version: 4a06c6bf63cff81a7a4df4978d9c29b5c5037359
+- name: github.com/bouk/monkey
+  version: e8ac0cba3b42082cac2c6549eaa3c60f18373c76
+- name: github.com/clbanning/mxj
+  version: 79cfe7d36986ce108bd1e2c1d0a2a85c895237a2
+- name: github.com/fatih/structs
+  version: 4966fc68f5b7593aafa6cbbba2d65ec6e1416047
+- name: github.com/fsnotify/fsnotify
+  version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
+- name: github.com/gin-contrib/sse
+  version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
+- name: github.com/gin-gonic/gin
+  version: b869fe1415e4b9eb52f247441830d502aece2d4d
+  subpackages:
+  - binding
+  - json
+  - render
+- name: github.com/go-sql-driver/mysql
+  version: 72cd26f257d44c1114970e19afddcd812016007e
+- name: github.com/gogap/env_json
+  version: 86150085ddbeee9e9a1808c00d19b4310aa8f7fe
+- name: github.com/gogap/env_strings
+  version: bdb994cfe0932e690e632d780069865aa1d3eee1
+- name: github.com/golang/freetype
+  version: e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4
+  subpackages:
+  - raster
+  - truetype
+- name: github.com/golang/protobuf
+  version: aa810b61a9c79d51363740d207bb46cf8e620ed5
+  subpackages:
+  - proto
+- name: github.com/hashicorp/hcl
+  version: 65a6292f0157eff210d03ed1bf6c59b190b8b906
+  subpackages:
+  - hcl/ast
+  - hcl/parser
+  - hcl/printer
+  - hcl/scanner
+  - hcl/strconv
+  - hcl/token
+  - json/parser
+  - json/scanner
+  - json/token
+- name: github.com/heirko/go-contrib
+  version: 82c95aa7d665584a236fb3aa7f985c60b3e6ad7f
+  subpackages:
+  - logrusHelper
+- name: github.com/heralight/logrus_mate
+  version: 969b6efb860ed2cf40d7e280c831928a2555fff9
+  subpackages:
+  - hooks/file
+  - hooks/filewithformatter
+  - hooks/graylog
+  - hooks/slack
+  - hooks/utils/caller
+- name: github.com/hoisie/redis
+  version: b5c6e81454e0395c280f220d82a6854fd0fcf42e
+- name: github.com/huichen/sego
+  version: 3f3c8a8cfaccd7283fb524996d1cd19a8fd228d2
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/jinzhu/gorm
+  version: 472c70caa40267cb89fd8facb07fe6454b578626
+  subpackages:
+  - dialects/mysql
+- name: github.com/jinzhu/inflection
+  version: 04140366298a54a039076d798123ffa108fff46c
+- name: github.com/johntdyer/slack-go
+  version: 95fac1160b220c5abcf8b0ef88e9c3cb213c09f4
+- name: github.com/johntdyer/slackrus
+  version: f7aae3243a0786c5a974bce71ed951c459876e64
+- name: github.com/json-iterator/go
+  version: d05f387f50c0c406889b62cb5ec51c76a64d89ee
+- name: github.com/konsorten/go-windows-terminal-sequences
+  version: 5c8c8bd35d3832f5d134ae1e1e375b69a4d25242
+- name: github.com/magiconair/properties
+  version: 7c38529aac7222391b7a2661365177a97e21b998
+- name: github.com/mattn/go-isatty
+  version: 3fb116b820352b7f0c281308a4d6250c22d94e27
+- name: github.com/mediocregopher/radix.v2
+  version: b67df6e626f993b64b3ca9f4b8630900e61002e3
+  subpackages:
+  - '...'
+  - pool
+  - redis
+- name: github.com/mitchellh/go-homedir
+  version: ae18d6b8b3205b561c79e8e5f69bff09736185f4
+- name: github.com/mitchellh/mapstructure
+  version: 3536a929edddb9a5b34bd6861dc4a9647cb459fe
+- name: github.com/modern-go/concurrent
+  version: bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94
+- name: github.com/modern-go/reflect2
+  version: 94122c33edd36123c84d5368cfb2b69df93a0ec8
+- name: github.com/newrelic/go-agent
+  version: f5bce3387232559bcbe6a5f8227c4bf508dac1ba
+  subpackages:
+  - internal
+  - internal/cat
+  - internal/jsonx
+  - internal/logger
+  - internal/sysinfo
+  - internal/utilization
+- name: github.com/pelletier/go-toml
+  version: 27c6b39a135b7dc87a14afb068809132fb7a9a8f
+- name: github.com/pkg/errors
+  version: 059132a15dd08d6704c67711dae0cf35ab991756
+- name: github.com/sigurn/crc8
+  version: e55481d6f45c5a8f040343bace9013571dae103e
+- name: github.com/sigurn/utils
+  version: f19e41f79f8f006116f682c1af454591bc278ad4
+- name: github.com/sirupsen/logrus
+  version: bcd833dfe83d3cebad139e4a29ed79cb2318bf95
+- name: github.com/spf13/afero
+  version: d40851caa0d747393da1ffb28f7f9d8b4eeffebd
+  subpackages:
+  - mem
+- name: github.com/spf13/cast
+  version: 8c9545af88b134710ab1cd196795e7f2388358d7
+- name: github.com/spf13/cobra
+  version: ef82de70bb3f60c65fb8eebacbb2d122ef517385
+- name: github.com/spf13/jwalterweatherman
+  version: 94f6ae3ed3bceceafa716478c5fbf8d29ca601a1
+- name: github.com/spf13/pflag
+  version: aea12ed6721610dc6ed40141676d7ab0a1dac9e9
+- name: github.com/spf13/viper
+  version: a1b837276271029e31f796ae5d03ba9ffb017244
+- name: github.com/stretchr/testify
+  version: f35b8ab0b5a2cef36673838d662e249dd9c94686
+- name: github.com/swaggo/gin-swagger
+  version: 6f4fdc3ec4545d77ce9f36016e2f2bc7356a356c
+  subpackages:
+  - swaggerFiles
+- name: github.com/tealeg/xlsx
+  version: 8be35264fa75a1bbe954ce51eba04f273e2c59e5
+- name: github.com/ugorji/go
+  version: 772ced7fd4c2f6322c07537a9a93b68d74551fa6
+  subpackages:
+  - codec
+- name: github.com/xykong/qcloudsms_go
+  version: 2c77fefc7e690d4a1ed7bb19ca3c0c21b9186b5b
+- name: github.com/xykong/snowflake
+  version: 5708ef8593b0cb417ac6622a977575151e05d797
+- name: github.com/xykong/tlog
+  version: dac2cced35d50c8b9a353c8148f6e5a618de23c5
+- name: golang.org/x/crypto
+  version: 505ab145d0a99da450461ae2c1a9f6cd10d1f447
+  subpackages:
+  - ssh/terminal
+- name: golang.org/x/image
+  version: cd38e8056d9b27bb2f265effa37fb0ea6b8a7f0f
+  subpackages:
+  - font
+  - math/fixed
+- name: golang.org/x/sys
+  version: 2a47403f2ae58167c4d75973960ccc62b28cb0d8
+  subpackages:
+  - unix
+  - windows
+- name: golang.org/x/text
+  version: 6f44c5a2ea40ee3593d98cdcc905cc1fdaa660e2
+  subpackages:
+  - transform
+  - unicode/norm
+- name: google.golang.org/appengine
+  version: a37df1387b4521194676d88c79230c613610d5f4
+  subpackages:
+  - cloudsql
+- name: gopkg.in/gemnasium/logrus-graylog-hook.v2
+  version: c4a7de647eaaac00ffea599b7773e5e6804fa3b7
+- name: gopkg.in/go-playground/validator.v8
+  version: 5f1438d3fca68893a817e4a66806cea46a9e4ebf
+- name: gopkg.in/yaml.v2
+  version: 51d6538a90f86fe93ac480b35f37b2be17fef232
+testImports: []

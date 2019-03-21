@@ -1,0 +1,123 @@
+---
+GameSvrId: 1.0.0.1
+ysdk:
+  host: https://ysdktest.qq.com
+  YSDK_QQ:
+    iZoneAreaID: 0
+    AppId: '1107950809'
+    AppKey: S1zZjNUSlhwYlUjW
+  YSDK_Wechat:
+    iZoneAreaID: 0
+    AppId: wx67722a94f90b26a4
+    AppKey: b14512ea8bd8fbaa59cb7a14e92aa5f3
+    #微信开放平台解释微信refresh_token有效期30天。
+    #文档地址: https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419317851&token=&lang=zh_CN
+    RefreshTokenExpirationSeconds: 2592000
+
+msdk:
+  host: http://msdktest.qq.com
+  MsdkKey: 3e4a263b0b6830eb88f9531b124511a2
+  Wechat:
+    iZoneAreaID: 0
+    AppId: wx6dfb1269f082c9b7
+    AppKey: 9565846cb97bd462bf90676670da09e9
+  QQ:
+    iZoneAreaID: 0
+    AppId: '1106545613'
+    AppKey: AW35ioVdLjRjVnj8
+  Guest:
+    iZoneAreaID: 0
+    AppId: G_1106545613
+    AppKey: AW35ioVdLjRjVnj8
+  Test:
+    iZoneAreaID: 0
+    AppId: LOVEAUTH-TEST-APP-ID
+    AppKey: LOVEAUTH-TEST-APP-KEY
+tlog:
+  format: '1.0.0'
+  address: ''
+  mysql:
+    host: localhost
+    port: 3306
+    user: root
+    password: ''
+    database: db_loveworld_online
+    enable_ext: true
+    online_table: online_cnt
+    register_table: player_register
+    payment_table: player_payment
+  updateOnlineTableSeconds: 60
+  updateGameSvrStateSeconds: 300
+tss:
+  enable: false
+  address: 10.1.16.201:8000
+  shared_lib_dir: "."
+  configs: "./configs"
+idip:
+  games:
+    '0':
+      '0': []
+      '1': []
+    '1':
+      '0': []
+      '1': []
+    '2':
+      '0': []
+      '1': []
+    '91':
+      '0': []
+      '1': []
+    '998':
+      '0': []
+      '1': []
+    '999':
+      '0': []
+      '1': []
+    '99':
+      '0': []
+      '1': []
+    '98':
+      '0': []
+      '1': []
+  configs:
+    'tencent_wechat': []
+    'tencent_qq': []
+    'device': []
+# 米大师系统配置
+# 首级key为平台, 0: iOS, 1: Android
+# 二级为业务模式, currency: 游戏币, product: 直购
+midas:
+  0:
+    currency:
+      AppId: 1450014425
+      AppKey: 9BIrsfkFI4v3KFYtMhtbe98sBTgrKrDr
+    product:
+      AppId: 1450014426
+      AppKey: CsnHvlj6mc0baRNdzkTMOZUJ5rCYMSCC
+  1:
+    currency:
+      AppId: 1450014200
+      AppKey: n32dMJcQYsWsjiVvuZx7AnEI0MQf6HVR
+    product:
+      AppId: 1450014249
+      AppKey: yl6XfrFlVPHc8TxQyniFY074vub9iqTx
+  host: http://msdktest.qq.com
+  path:
+  qq_zoneid: '1'
+  wechat_zoneid: '1'
+  default_zoneid: '1'
+
+weibo:
+  Host: https://api.weibo.com
+  AppKey: '3942565295'
+  AppSecret: 73f0a907a5cd9cf630ecbf1fe5ed60ee
+
+quickSdk:
+  ProductCode: '49669772296804746051141658820044'
+  ProductKey: '91188911'
+
+huawei:
+  authUrl: https://gss-cn.game.hicloud.com/gameservice/api/gbClientApi
+  privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCEohP+yVKqguQxOURdVBbD1QikWQ9X9+l1pjiyMfFZlwdx6ofgBrk8ywT1URNFqQQ5fvHvHVujK5SXIOumj3tWsHJMOW3JYZ6ByORDCS2KY6+oJEwEjUqBgnjr2WRuP2CRffRXsZQAksYeGcgicRW9+vED5UGGi86kicTgYJ80WjnkZIZSEiXb3EiWHWW9GnJB1+fqXSQ0S8eKlQ0p9oYjJnBE5g+nLLJRVw+cOs85cZVA8SXAdQLOVpUFrdFONmafLd7MzpsUtNACcZgxp9Oy4uI/hbsMp3o/jbl+6PGnpv/LDpTsFrr8Nys4WogaSajGK2mXbl3eKBS+HIZ3Tu21AgMBAAECggEAPw8sQIwJcKZQxhJ7LYBIXo1P0YvCXsmwxs3j0N0r6bODx6aBOYMY2Q2Rau1EI2+LYaa4cj5cDkUvHXd6crNvKbU0cocvanquOPiBhlm7vDtPDbtMJTHkBZU51rCCLmSVjjb7UCJOwsMFzNPnMnDfrHa91mNOdyDLe7FA2Ik3yFSZ/RDDPGSbqR+88G51obpw6qlbxd1IF1LtxKS/v4zs4HMO1Do6NVDZQF5fneO7LPDA39nqrLI/E1KxowZxaaUKi8qeu8994HKYGyzgYkFOJmnrb1Cn4i4jfTyESK0/i60VLPieXTL3hPeP/S3LW18rf/O1WhD4PH9gENLInJ9X9QKBgQDDzk5fQIPh3hnPe1UVVhbTVOfzdtJrt+jePwbLrExwoSSUjpQYUNRBAdXOCV4jaPYEuITqQ7GG60XfACVNrCpmg7MOnMctVpmipzplMmJJ59/sVHU6jn1MygtSNDIyBr1VH5zTQwoTuZ6A2zXrUHk1RUaqIL2p5j0X/pN9RCDTDwKBgQCtaCY0PMfuxyMM/WhC3GtK0Xo5r2Lfr/MIyDYvpLelHn8blJflgzIcVNtHNSgRcrTpy0C5h/I1s61+76dR//e0nNJZfzAGsNVlD+q0UJIdlVg11hBWAncyRT2j396eXOeGBrd9kXmoBlcPyqNv8cfI0RAVnAVQ+qgyBt4AX2gi+wKBgEyD8ChUw7Sd4CQuI9+ElsLaqRGA21VwtrUyl+s7V1uj/PF4jfK6k1cb6nrrOjhIKetKV9ZbwaHhippMKkeiAaexy2ToawUSlFL1WmJ1P+d1jxGBJ5ZMXDaHtcjX0M2vyIjdI6GCzwtKO+BKyVU9S0A/5A9TYApmiHU57FTFLLaNAoGAZ6QyAVK6pIo89syWfi/DqMoe5U9gJxXAimUvjbZDVNsvWUqspq6NSsWk8aBhvFv0qS+kFb+dEl+7uHyAYtA8OqToTDlqePVD9c1XmEH3strKCBNTXDTJDTC5MLLjGX+pmT92eAR00+pGKtgQax31LJ9Xn7LKsqW91XipQ0vCr/UCgYASp8BsqC85y62ydgFk22rG8lMhBE3D2iA01g366UvFRvBYsCnDRZOqJHxIDbV5dHHUDmX7Qa2wcvjPYKm6IgfgJZ82jZCw1xd8IvJyUHf+trEhJh8ilSm4dfbXkey6fLpdAzFFBh2B/3DCqOke/ecWqqAl+10uEZSia4fnVlGoqg==
+  appId: 100526975
+  cpId: '890086000102169590'

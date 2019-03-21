@@ -1,4 +1,4 @@
-// Copyright 2016 - 2018 The excelize Authors. All rights reserved. Use of
+// Copyright 2016 - 2019 The excelize Authors. All rights reserved. Use of
 // this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 //
@@ -31,10 +31,9 @@ import (
 //
 func (f *File) GetRows(sheet string) [][]string {
 	xlsx := f.workSheetReader(sheet)
-	rows := [][]string{}
 	name, ok := f.sheetMap[trimSheetName(sheet)]
 	if !ok {
-		return rows
+		return [][]string{}
 	}
 	if xlsx != nil {
 		output, _ := xml.Marshal(f.Sheet[name])
@@ -44,15 +43,12 @@ func (f *File) GetRows(sheet string) [][]string {
 	d := f.sharedStringsReader()
 	var inElement string
 	var r xlsxRow
-	var row []string
 	tr, tc := f.getTotalRowsCols(name)
-	for i := 0; i < tr; i++ {
-		row = []string{}
-		for j := 0; j <= tc; j++ {
-			row = append(row, "")
-		}
-		rows = append(rows, row)
+	rows := make([][]string, tr)
+	for i := range rows {
+		rows[i] = make([]string, tc+1)
 	}
+	var row int
 	decoder := xml.NewDecoder(bytes.NewReader(f.readXML(name)))
 	for {
 		token, _ := decoder.Token()
@@ -70,12 +66,15 @@ func (f *File) GetRows(sheet string) [][]string {
 					c := TitleToNumber(strings.Map(letterOnlyMapF, colCell.R))
 					val, _ := colCell.getValueFrom(f, d)
 					rows[cr][c] = val
+					if val != "" {
+						row = r.R
+					}
 				}
 			}
 		default:
 		}
 	}
-	return rows
+	return rows[:row]
 }
 
 // Rows defines an iterator to a sheet
@@ -249,7 +248,7 @@ func (f *File) sharedStringsReader() *xlsxSST {
 		if len(ss) == 0 {
 			ss = f.readXML("xl/SharedStrings.xml")
 		}
-		_ = xml.Unmarshal([]byte(ss), &sharedStrings)
+		_ = xml.Unmarshal(namespaceStrictToTransitional(ss), &sharedStrings)
 		f.SharedStrings = &sharedStrings
 	}
 	return f.SharedStrings
@@ -359,7 +358,7 @@ func (f *File) RemoveRow(sheet string, row int) {
 	}
 }
 
-// InsertRow provides a function to insert a new row before given row index.
+// InsertRow provides a function to insert a new row after given row index.
 // For example, create a new row before row 3 in Sheet1:
 //
 //    xlsx.InsertRow("Sheet1", 2)
@@ -370,6 +369,46 @@ func (f *File) InsertRow(sheet string, row int) {
 	}
 	row++
 	f.adjustHelper(sheet, -1, row, 1)
+}
+
+// DuplicateRow inserts a copy of specified row below specified
+//
+//    xlsx.DuplicateRow("Sheet1", 2)
+//
+func (f *File) DuplicateRow(sheet string, row int) {
+	if row < 0 {
+		return
+	}
+	row2 := row + 1
+	f.adjustHelper(sheet, -1, row2, 1)
+
+	xlsx := f.workSheetReader(sheet)
+	idx := -1
+	idx2 := -1
+
+	for i, r := range xlsx.SheetData.Row {
+		if r.R == row {
+			idx = i
+		} else if r.R == row2 {
+			idx2 = i
+		}
+		if idx != -1 && idx2 != -1 {
+			break
+		}
+	}
+
+	if idx == -1 || (idx2 == -1 && len(xlsx.SheetData.Row) >= row2) {
+		return
+	}
+	rowData := xlsx.SheetData.Row[idx]
+	cols := make([]xlsxC, 0, len(rowData.C))
+	rowData.C = append(cols, rowData.C...)
+	f.ajustSingleRowDimensions(&rowData, 1)
+	if idx2 != -1 {
+		xlsx.SheetData.Row[idx2] = rowData
+	} else {
+		xlsx.SheetData.Row = append(xlsx.SheetData.Row, rowData)
+	}
 }
 
 // checkRow provides a function to check and fill each column element for all

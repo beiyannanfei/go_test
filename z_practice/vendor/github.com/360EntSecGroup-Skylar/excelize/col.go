@@ -1,4 +1,4 @@
-// Copyright 2016 - 2018 The excelize Authors. All rights reserved. Use of
+// Copyright 2016 - 2019 The excelize Authors. All rights reserved. Use of
 // this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 //
@@ -337,7 +337,8 @@ func (f *File) RemoveCol(sheet, column string) {
 	f.adjustHelper(sheet, col, -1, -1)
 }
 
-// Completion column element tags of XML in a sheet.
+// completeCol provieds function to completion column element tags of XML in a
+// sheet.
 func completeCol(xlsx *xlsxWorksheet, row, cell int) {
 	buffer := bytes.Buffer{}
 	for r := range xlsx.SheetData.Row {

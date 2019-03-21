@@ -17,3 +17,5 @@ import:
   - bson
 - package: github.com/go-redis/redis
   version: ~6.14.2
+- package: github.com/aliyun/alibaba-cloud-sdk-go
+  version: ^1.53.19

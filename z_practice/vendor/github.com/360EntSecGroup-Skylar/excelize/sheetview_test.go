@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/360EntSecGroup-Skylar/excelize"
 )
 
@@ -13,12 +15,14 @@ var _ = []excelize.SheetViewOption{
 	excelize.ShowFormulas(false),
 	excelize.ShowGridLines(true),
 	excelize.ShowRowColHeaders(true),
+	excelize.TopLeftCell("B2"),
 	// SheetViewOptionPtr are also SheetViewOption
 	new(excelize.DefaultGridColor),
 	new(excelize.RightToLeft),
 	new(excelize.ShowFormulas),
 	new(excelize.ShowGridLines),
 	new(excelize.ShowRowColHeaders),
+	new(excelize.TopLeftCell),
 }
 
 var _ = []excelize.SheetViewOptionPtr{
@@ -27,6 +31,7 @@ var _ = []excelize.SheetViewOptionPtr{
 	(*excelize.ShowFormulas)(nil),
 	(*excelize.ShowGridLines)(nil),
 	(*excelize.ShowRowColHeaders)(nil),
+	(*excelize.TopLeftCell)(nil),
 }
 
 func ExampleFile_SetSheetViewOptions() {
@@ -40,6 +45,7 @@ func ExampleFile_SetSheetViewOptions() {
 		excelize.ShowGridLines(true),
 		excelize.ShowRowColHeaders(true),
 		excelize.ZoomScale(80),
+		excelize.TopLeftCell("C3"),
 	); err != nil {
 		panic(err)
 	}
@@ -91,6 +97,7 @@ func ExampleFile_GetSheetViewOptions() {
 		showGridLines     excelize.ShowGridLines
 		showRowColHeaders excelize.ShowRowColHeaders
 		zoomScale         excelize.ZoomScale
+		topLeftCell       excelize.TopLeftCell
 	)
 
 	if err := xl.GetSheetViewOptions(sheet, 0,
@@ -100,6 +107,7 @@ func ExampleFile_GetSheetViewOptions() {
 		&showGridLines,
 		&showRowColHeaders,
 		&zoomScale,
+		&topLeftCell,
 	); err != nil {
 		panic(err)
 	}
@@ -111,6 +119,15 @@ func ExampleFile_GetSheetViewOptions() {
 	fmt.Println("- showGridLines:", showGridLines)
 	fmt.Println("- showRowColHeaders:", showRowColHeaders)
 	fmt.Println("- zoomScale:", zoomScale)
+	fmt.Println("- topLeftCell:", `"`+topLeftCell+`"`)
+
+	if err := xl.SetSheetViewOptions(sheet, 0, excelize.TopLeftCell("B2")); err != nil {
+		panic(err)
+	}
+
+	if err := xl.GetSheetViewOptions(sheet, 0, &topLeftCell); err != nil {
+		panic(err)
+	}
 
 	if err := xl.SetSheetViewOptions(sheet, 0, excelize.ShowGridLines(false)); err != nil {
 		panic(err)
@@ -122,6 +139,7 @@ func ExampleFile_GetSheetViewOptions() {
 
 	fmt.Println("After change:")
 	fmt.Println("- showGridLines:", showGridLines)
+	fmt.Println("- topLeftCell:", topLeftCell)
 
 	// Output:
 	// Default:
@@ -131,37 +149,22 @@ func ExampleFile_GetSheetViewOptions() {
 	// - showGridLines: true
 	// - showRowColHeaders: true
 	// - zoomScale: 0
+	// - topLeftCell: ""
 	// After change:
 	// - showGridLines: false
+	// - topLeftCell: B2
 }
 
 func TestSheetViewOptionsErrors(t *testing.T) {
 	xl := excelize.NewFile()
 	const sheet = "Sheet1"
 
-	if err := xl.GetSheetViewOptions(sheet, 0); err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
-	if err := xl.GetSheetViewOptions(sheet, -1); err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
-	if err := xl.GetSheetViewOptions(sheet, 1); err == nil {
-		t.Error("Error expected but got nil")
-	}
-	if err := xl.GetSheetViewOptions(sheet, -2); err == nil {
-		t.Error("Error expected but got nil")
-	}
-
-	if err := xl.SetSheetViewOptions(sheet, 0); err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
-	if err := xl.SetSheetViewOptions(sheet, -1); err != nil {
-		t.Errorf("Unexpected error: %s", err)
-	}
-	if err := xl.SetSheetViewOptions(sheet, 1); err == nil {
-		t.Error("Error expected but got nil")
-	}
-	if err := xl.SetSheetViewOptions(sheet, -2); err == nil {
-		t.Error("Error expected but got nil")
-	}
+	assert.NoError(t, xl.GetSheetViewOptions(sheet, 0))
+	assert.NoError(t, xl.GetSheetViewOptions(sheet, -1))
+	assert.Error(t, xl.GetSheetViewOptions(sheet, 1))
+	assert.Error(t, xl.GetSheetViewOptions(sheet, -2))
+	assert.NoError(t, xl.SetSheetViewOptions(sheet, 0))
+	assert.NoError(t, xl.SetSheetViewOptions(sheet, -1))
+	assert.Error(t, xl.SetSheetViewOptions(sheet, 1))
+	assert.Error(t, xl.SetSheetViewOptions(sheet, -2))
 }

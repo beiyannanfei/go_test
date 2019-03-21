@@ -1,4 +1,4 @@
-// Copyright 2016 - 2018 The excelize Authors. All rights reserved. Use of
+// Copyright 2016 - 2019 The excelize Authors. All rights reserved. Use of
 // this source code is governed by a BSD-style license that can be found in
 // the LICENSE file.
 //
@@ -253,7 +253,7 @@ type aLn struct {
 	Algn      string      `xml:"algn,attr,omitempty"`
 	Cap       string      `xml:"cap,attr,omitempty"`
 	Cmpd      string      `xml:"cmpd,attr,omitempty"`
-	W         int         `xml:"w,attr,omitempty" `
+	W         int         `xml:"w,attr,omitempty"`
 	NoFill    string      `xml:"a:noFill,omitempty"`
 	Round     string      `xml:"a:round,omitempty"`
 	SolidFill *aSolidFill `xml:"a:solidFill"`
@@ -301,6 +301,8 @@ type cView3D struct {
 // plot area of the chart.
 type cPlotArea struct {
 	Layout        *string  `xml:"c:layout"`
+	AreaChart     *cCharts `xml:"c:areaChart"`
+	Area3DChart   *cCharts `xml:"c:area3DChart"`
 	BarChart      *cCharts `xml:"c:barChart"`
 	Bar3DChart    *cCharts `xml:"c:bar3DChart"`
 	DoughnutChart *cCharts `xml:"c:doughnutChart"`
@@ -591,7 +593,7 @@ type formatChartSeries struct {
 	} `json:"line"`
 	Marker struct {
 		Type   string  `json:"type"`
-		Size   int     `json:"size,"`
+		Size   int     `json:"size"`
 		Width  float64 `json:"width"`
 		Border struct {
 			Color string `json:"color"`
