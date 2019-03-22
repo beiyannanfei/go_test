@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// 13~23 例子来源 https://juejin.im/post/5b5bd2ddf265da0f716c2fea?utm_source=gold_browser_extension
+
 func main() {
 	arrayA := [...]int{0: 1, 2: 1, 3: 4}
 	fmt.Println(arrayA)			//[1 0 1 4]

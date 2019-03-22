@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+// 13~23 例子来源 https://juejin.im/post/5b5bd2ddf265da0f716c2fea?utm_source=gold_browser_extension
+
 //Golang中函数被看做是值,函数值不可以比较，也不可以作为map的key
 
 func main() {
