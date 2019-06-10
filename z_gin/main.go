@@ -270,6 +270,13 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"msg": "OK"})
 	})
 
+	//文件下载
+	router.GET("/file/down", func(c *gin.Context) {
+		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "download_test"))//fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
+		c.Writer.Header().Add("Content-Type", "application/octet-stream")
+		c.File("/Users/wyq/Desktop/abcdefg")
+	})
+
 	//http.ListenAndServe(":8090", router)		//两种方式均可以启动服务
 	router.Run(":8090")
 }
