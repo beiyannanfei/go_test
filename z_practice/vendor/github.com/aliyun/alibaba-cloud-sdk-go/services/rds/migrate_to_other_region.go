@@ -77,14 +77,16 @@ func (client *Client) MigrateToOtherRegionWithCallback(request *MigrateToOtherRe
 type MigrateToOtherRegionRequest struct {
 	*requests.RpcRequest
 	ResourceOwnerId      requests.Integer `position:"Query" name:"ResourceOwnerId"`
-	TargetZoneId         string           `position:"Query" name:"TargetZoneId"`
 	ResourceOwnerAccount string           `position:"Query" name:"ResourceOwnerAccount"`
-	EffectiveTime        string           `position:"Query" name:"EffectiveTime"`
 	OwnerAccount         string           `position:"Query" name:"OwnerAccount"`
+	TargetVSwitchId      string           `position:"Query" name:"TargetVSwitchId"`
+	OwnerId              requests.Integer `position:"Query" name:"OwnerId"`
+	TargetVpcId          string           `position:"Query" name:"TargetVpcId"`
+	TargetZoneId         string           `position:"Query" name:"TargetZoneId"`
+	EffectiveTime        string           `position:"Query" name:"EffectiveTime"`
 	DBInstanceId         string           `position:"Query" name:"DBInstanceId"`
 	TargetRegionId       string           `position:"Query" name:"TargetRegionId"`
 	SwitchTime           string           `position:"Query" name:"SwitchTime"`
-	OwnerId              requests.Integer `position:"Query" name:"OwnerId"`
 }
 
 // MigrateToOtherRegionResponse is the response struct for api MigrateToOtherRegion

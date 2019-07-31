@@ -78,6 +78,7 @@ type InsertConfigCenterRequest struct {
 	*requests.RoaRequest
 	DataId          string `position:"Query" name:"DataId"`
 	Data            string `position:"Query" name:"Data"`
+	AppName         string `position:"Query" name:"AppName"`
 	LogicalRegionId string `position:"Query" name:"LogicalRegionId"`
 	Group           string `position:"Query" name:"Group"`
 }
@@ -95,7 +96,7 @@ func CreateInsertConfigCenterRequest() (request *InsertConfigCenterRequest) {
 	request = &InsertConfigCenterRequest{
 		RoaRequest: &requests.RoaRequest{},
 	}
-	request.InitWithApiInfo("Edas", "2017-08-01", "InsertConfigCenter", "/pop/v5/configCenter", "edas", "openAPI")
+	request.InitWithApiInfo("Edas", "2017-08-01", "InsertConfigCenter", "/pop/v5/configCenter", "", "")
 	request.Method = requests.POST
 	return
 }

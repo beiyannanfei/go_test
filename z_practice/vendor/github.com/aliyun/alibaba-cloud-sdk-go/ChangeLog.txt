@@ -1,3 +1,545 @@
+2019-06-06 Version: 1.60.37
+1, Add RuleId in DescribeRuleAttribute.
+
+2019-06-05 Version: 1.60.36
+1, Update DescribeDataLimitDetail interface, add password for response
+
+2019-06-04 Version: 1.60.35
+1, Add new API: UpdateLivePullStreamInfoConfig
+
+2019-06-03 Version: 1.60.34
+1, Add openapi of ACL.
+
+2019-06-03 Version: 1.60.33
+1, Order info add relatedOrderId.
+
+2019-05-31 Version: 1.60.32
+1, add api 'search traces count' 
+2, add page index for api 'searchTraces'
+
+2019-05-31 Version: 1.60.31
+1, Add authority in GetMaterials API.
+
+2019-05-30 Version: 1.60.30
+Fix: Handle the repeatlist parameter correctly
+
+2019-05-30 Version: 1.60.29
+1.Fix: Handle the repeatlist parameter correctly
+
+2019-05-30 Version: 1.60.28
+1. Re-generate for STS-2015-04-01.
+
+2019-05-30 Version: 1.60.27
+1. Re-generate for STS 2015-04-01.
+
+2019-05-29 Version: 1.60.26
+1, Fix ServiceCode typo in request
+
+2019-05-29 Version: 1.60.25
+1, Modify DescribeRestoreTaskList DBS interface.
+2, Modify DescribeFullBackupList DBS interface.
+
+2019-05-28 Version: 1.60.24
+1, CreateDBInstance now support autoRenew
+
+2019-05-27 Version: 1.60.23
+1, Support video transcode.
+
+2019-05-27 Version: 1.60.22
+1, Initial release of api, including data management api, rule configuration api and system configuration api.
+
+2019-05-24 Version: 1.60.21
+1, The list of site monitoring probes adds ISP and city fields in English.
+2, Fixed the capitalization problem of Describe MetricData and Describe Site Monitor Statistics API metricName.
+
+2019-05-23 Version: 1.60.20
+1, Fixed bug of the JSON list in GO sdk.
+
+2019-05-22 Version: 1.60.19
+1, Add EndTime parameter to api ModifyPrepayInstanceSpec
+2, Add RebootTime parameter to api ModifyPrepayInstanceSpec
+
+2019-05-20 Version: 1.60.18
+1, Added the cross zones supported.
+
+2019-05-20 Version: 1.60.17
+1, Add both api, ListNotaryInfos
+
+2019-05-20 Version: 1.60.16
+1, Initial release of api, including data management api, rule configuration api and system configuration api.
+
+2019-05-20 Version: 1.60.15
+1,  DescribeRouteTableList add route table status
+2,  DescribeRouteTables add route table  status
+
+2019-05-18 Version: 1.60.14
+1, Add ModifyBackupObjects DBS interface.
+
+2019-05-16 Version: 1.60.13
+1, Update SDK Version
+2, Change api UpgradeClusterAddons, UpgradeClusterComponents, DescribeClusterAddonsVersion to public
+
+
+2019-05-16 Version: 1.60.12
+1, Add some new apis to fetch the usage data from VoD, such as DescribeVodDomainUsageData, DescribeVodStorageData, DescribeVodTranscodeData, DescribeVodAIData.
+2, Add a new api named GetUploadDetails to describe the upload detail, such as uploading time and uploading source.
+3, Add a new api named GetAIVideoTagResult to describe the result of AI tag.
+4, Add new field Icon and OnlineStatus to some apis to manage short video materials, such as SearchMedia, GetAttachedMediaInfo, CreateUploadAttachedMedia.
+5, Add a new field RegionId to the response of GetAttachedMediaInfo and GetImageInfo.
+6, Add the field named UserData to SubmitSnapshotJob api request.
+
+2019-05-16 Version: 1.60.11
+1, Update SDK Version
+2, Change api UpgradeClusterAddons, UpgradeClusterComponents, DescribeClusterAddonsVersion to public
+
+
+2019-05-16 Version: 1.60.10
+1, Update SDK version
+2, Add api DescribeClusterAddonsVersion
+
+
+2019-05-16 Version: 1.60.9
+1, This is an example of release-log.
+2, Please strictly follow this format to edit in English.
+3, Format：Number + , + Space + Description
+
+2019-05-16 Version: 1.60.8
+1, Scaling configuration add security group ids 
+
+2019-05-15 Version: 1.60.7
+1, Add InstanceId parameter to api CreateDisk
+2, Add parameter Affinity and Tenancy in ECS instance DedicatedHost related apis.
+3, Add SecurityGroupIds parameter to Instance creation apis.
+
+2019-05-14 Version: 1.60.6
+1, Support body detect.
+
+2019-05-14 Version: 1.60.5
+1, support body detect
+
+2019-05-14 Version: 1.60.4
+1, Support body detect.
+
+2019-05-14 Version: 1.60.3
+1, Support body detect.
+
+2019-05-14 Version: 1.60.2
+1, Support body detect.
+
+2019-05-14 Version: 1.60.1
+1, Support body detect.
+
+2019-05-13 Version: 1.60.0
+1, Add three new apis, SaveSingleTaskForSaveArtExtension, QueryArtExtension and CancelTask.
+
+2019-05-13 Version: 1.59.0
+1, Add three new apis, SaveSingleTaskForSaveArtExtension, QueryArtExtension and CancelTask.
+
+2019-05-13 Version: 1.58.11
+1, Support for creating instances and joining multiple security groups at the same time.
+
+2019-05-13 Version: 1.58.10
+1, Add Vpc openapi interface，Support for new fields.
+2, Support for nacl openapi.
+3, Fixed some problems of the vpc openapi.
+
+2019-05-13 Version: 1.58.9
+1, Modify CreateRestoreTaskRequest DBS interface.
+
+2019-05-05 Version: 1.58.8
+1, CreateInstance add ClientToken parameter.
+
+2019-04-29 Version: 1.58.7
+1, add new api
+
+2019-04-28 Version: 1.58.6
+1, Publish DescribeAvailableResource.
+
+2019-04-26 Version: 1.58.5
+1, Add resource describe api.
+
+2019-04-26 Version: 1.58.4
+1, add new openapi.
+
+2019-04-25 Version: 1.58.3
+1, The alarm contact interface increases paging parameters
+
+2019-04-25 Version: 1.58.2
+1, upgrade sdk version.
+
+2019-04-23 Version: 1.58.1
+1, Support mounting multiple volumes using different protocol
+2, Support scaling out cross AZ
+
+2019-04-23 Version: 1.58.0
+1, Add a new api, QueryDomainByDomainName.
+
+2019-04-22 Version: 1.57.1
+1, Add interface ModifyDBNodeClass.
+2, Add interface ModifyAutoRenewAttribute and DescribeAutoRenewAttribute.
+3, Param AutoRenew is supported in interface CreateDBCluster.
+
+2019-04-22 Version: 1.57.0
+1, Add a new api, QueryDomainByDomainName.
+
+2019-04-22 Version: 1.56.14
+1, This is an example of release-log.
+2, Please strictly follow this format to edit in English.
+3, Format：Number + , + Space + Description
+
+2019-04-22 Version: 1.56.13
+1, Add CreateDBCluster interface;
+2, Add CreateDBNodes interface;
+
+2019-04-18 Version: 1.56.12
+1, New service
+
+2019-04-18 Version: 1.56.11
+1, CreateCacheAnalysisTask prop modify
+
+2019-04-18 Version: 1.56.10
+1, add ReservedInstance API.
+
+2019-04-17 Version: 1.56.9
+1, Add DescribeRestoreTaskList DBS interface.
+2, Add DescribeNodeCidrList DBS interface.
+
+2019-04-16 Version: 1.56.8
+1, Fixed DescribeAccounts response type error.
+
+2019-04-16 Version: 1.56.7
+1, Add api about pushing security check commands
+
+2019-04-16 Version: 1.56.6
+1, Fixed describeAccounts response type error
+
+2019-04-16 Version: 1.56.5
+1, Mark CreateDiagnosticReport as public api.
+2, ModifySecurityIps support modifyMode parameter.
+
+2019-04-16 Version: 1.56.4
+1, Add group api.
+
+2019-04-16 Version: 1.56.3
+1, Add group api.
+
+2019-04-16 Version: 1.56.2
+1, Add group api.
+
+2019-04-16 Version: 1.56.1
+1, Add group api.
+
+2019-04-16 Version: 1.56.0
+1, Add the go version of sdk.
+
+2019-04-15 Version: 1.55.7
+1, Add SDK for goLang version.
+
+2019-04-15 Version: 1.55.6
+1, Add CreateRestoreTask DBS interface.
+2, Add StartRestoreTask DBS interface.
+
+2019-04-15 Version: 1.55.5
+1, add arns parameter to CreateDisk/CreateInstance API in order to support disk encryption by performing a sts role play.
+
+2019-04-15 Version: 1.55.4
+1, Add apis, DescribeScreenHostStatistics、DescribeScreenSummaryInfo、DescribeScreenAttackAnalysisData、DescribeScreenAttackAnalysisData、DescribeScreenAttackAnalysisData
+
+2019-04-15 Version: 1.55.3
+1, Add Group Api.
+
+
+2019-04-11 Version: 1.55.2
+1, The ‘CreateProject’ interface adds the ‘ModelId’ parameter
+
+2019-04-11 Version: 1.55.1
+1, Add some new apis to manage VoD's App, such as CreateAppInfo, GetAppInfos, ListAppInfos, UpdateAppInfo, DeleteAppInfo, AttachAppPolicyToIdentity, DetachAppPolicyFromIdentity, ListAppPoliciesForIdentity and MoveAppResource.
+2, Add new apis SetMessageCallback, GetMessageCallback and DeleteMessageCallback to manage message callback configuration.
+3, Add new apis GetAttachedMedia, UpdateAttachedMediaInfos and DeleteAttachedMedia to manage attached media information.
+4, Add a new api named DeleteMultipartUpload to clean up the fragmented files generated during the upload process.
+5, Add a new field named AppId to some apis supporting the VoD App feature, such as CreateUploadVideo, SearchMedia, GetVideoInfo, GetVideoInfos; Add new fields named NonExistVideoIds and ForbiddenVideoIds to DeleteVideo api response; Add a new field named ForbiddenVideoIds to UpdateVideoInfos api response.
+6, The Editing supports multi-region and multi-materials. Add new fields named StorageLocation and RegionId in Project struct to GetEditingProject api response; Add new fields named StorageLocation, RegionId and Duration in ProjectList struct to SearchEditingProject api response; Add a new field named MaterialType to GetEditingProjectMaterials api request.
+7, Add new fields named TranscodeFileRegular, Clip and Rotate to GetTranscodeTemplateGroup api response to support the custom file path feature.
+8, Add a new field named AttachedMedia to api response to support the attached media feature.
+9, Add a new field named SubTotal to GetCategories response to show the number of sub category.
+10, Add a new field named AdditionType to GetVideoInfo and GetVideoInfos api request to fetch the custom media info and the corresponding field is CustomMediaInfo.
+
+2019-04-11 Version: 1.55.0
+1, Release AddImage/SearchImage/DeleteImage OpenApi.
+2, Add 'SearchByName' feature to SearchImage
+
+2019-04-10 Version: 1.54.1
+1, Modify DescribeBackupGatewayList DBS interface.
+
+2019-04-10 Version: 1.54.0
+1, New APIs for visual service (VNC).
+2, New APIs for software management.
+3, New APIs for CPFS filesystem.
+
+2019-04-09 Version: 1.53.93
+1, Add APIs: TagResource, UntagResource, ListResourceTags.
+2, Remove the optional parameter 'STSToken'  and replace it with 'SecurityToken'.
+
+2019-04-09 Version: 1.53.92
+1, support service account management networkInterface function.
+
+2019-04-09 Version: 1.53.91
+1, Add Apis for offline VerifySDK.
+
+2019-04-08 Version: 1.53.90
+1, Modify DescribeBackupPlanList DBS interface.
+2, Modify DescribeFullBackupList DBS interface.
+3, Modify DescribeIncrementBackupList DBS interface.
+4, Modify DescribeBackupGatewayList DBS interface.
+
+2019-04-08 Version: 1.53.89
+1, Add StopBackupPlan DBS interface.
+2, Add DescribeBackupPlanList DBS interface.
+3, Add DescribeFullBackupList DBS interface.
+4, Add DescribeIncrementBackupList DBS interface.
+5, Add DescribeBackupGatewayList DBS interface.
+
+2019-04-04 Version: 1.53.88
+1, ScalingConf systemDisk add DiskName and Description  parameters.
+2, ScalingConf dataDisk add DiskName & Description & Encrypted & KMSKeyId  parameters.
+
+2019-04-03 Version: 1.53.87
+1, Support DNAT/ENI/Online user count features.
+
+
+2019-04-03 Version: 1.53.86
+1, Add interfaces related to vulnerability whitelist
+2, Add interfaces related to vulnerability auto-del configuration
+3, Add interfaces related to vulnerability fix advise
+4, Add interfaces searching and operating vulnerability
+
+2019-03-29 Version: 1.53.85
+1, fix MNS Query params
+
+2019-03-29 Version: 1.53.84
+1, Fix error version
+
+2019-03-29 Version: 1.53.83
+1, Add DLQ message openAPI.
+2, Add Query the subscription relational openAPI.
+3, Remove white list restrictions.
+
+2019-03-28 Version: 1.53.82
+1, EDAS serverless support Pandora application deployment in war/jar mode
+
+2019-03-28 Version: 1.53.81
+1, Add multiple language support in DescribeZones
+2, Add gray parameter in CreateDisk
+
+2019-03-28 Version: 1.53.80
+1, Add instance remark modify api.
+
+2019-03-28 Version: 1.53.79
+1, Add logo detect.
+
+2019-03-27 Version: 1.53.78
+1, Add Project interface.
+2, Add Tag interface.
+3, Add TrainData interface.
+4, Add Train interface.
+5, Add Iteration interface.
+6, Add Predict interface.
+7, Add PredictData interface.
+
+2019-03-27 Version: 1.53.77
+1, Add Project interface.
+2, Add Tag interface.
+3, Add TrainData interface.
+4, Add Train interface.
+5, Add Iteration interface.
+6, Add Predict interface.
+7, Add PredictData interface.
+
+2019-03-27 Version: 1.53.76
+1, Add DLQ message openAPI.
+2, Add Query the subscription relational openAPI.
+3, Remove white list restrictions.
+
+2019-03-27 Version: 1.53.75
+1, Add DLQ message openAPI.
+2, Add Query the subscription relational openAPI.
+3, Remove white list restrictions.
+
+2019-03-21 Version: 1.53.74
+1, Update Dependency
+
+2019-03-21 Version: 1.53.73
+1,  Update Dependency
+
+2019-03-20 Version: 1.53.72
+1, Update the Dependency
+
+2019-03-20 Version: 1.53.71
+1, Update the Dependency
+
+2019-03-20 Version: 1.53.70
+1, Update the Dependency
+
+2019-03-20 Version: 1.53.69
+1, Update the Dependency
+
+2019-03-20 Version: 1.53.68
+1, Update Dependency
+
+2019-03-19 Version: 1.53.67
+1, Support ' fc ' Source DomainName
+
+2019-03-19 Version: 1.53.66
+1, move fields: tag, associate_person, cid
+
+2019-03-19 Version: 1.53.65
+1, format fields: tags, associatePerson
+
+2019-03-19 Version: 1.53.63
+1, Update Dependency
+
+2019-03-19 Version: 1.53.62
+1, Update Dependency
+
+2019-03-19 Version: 1.53.61
+1, This is an example of release-log.
+2, Please strictly follow this format to edit in English.
+3, Format：Number + , + Space + Description
+
+2019-03-18 Version: 1.53.60
+1, Signature Document SDK.
+2, First version publish.
+3, Beta Version SDK
+
+2019-03-18 Version: 1.53.59
+1, Update Dependency
+
+2019-03-18 Version: 1.53.58
+1, move AssociatePerson\Tag field
+2, Optimize RealName field
+
+2019-03-18 Version: 1.53.57
+1, Update Dependency
+
+2019-03-18 Version: 1.53.56
+1, Update Dependency
+
+2019-03-18 Version: 1.53.55
+1, Update Dependency
+
+2019-03-18 Version: 1.53.54
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.53
+1,  update api info
+
+2019-03-15 Version: 1.53.52
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.51
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.50
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.49
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.48
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.47
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.46
+1, update RemoveInstances, support  to delete 50 instances at a time. 
+
+2019-03-15 Version: 1.53.45
+1, Update Dependency
+
+2019-03-15 Version: 1.53.44
+1,  Update Dependency
+
+2019-03-15 Version: 1.53.43
+1, Update Dependency
+
+2019-03-15 Version: 1.53.42
+1, Update Dependency
+
+2019-03-14 Version: 1.53.41
+1, Update Dependency
+
+2019-03-14 Version: 1.53.40
+1, Update Dependency
+
+2019-03-14 Version: 1.53.39
+1, Update Dependency
+
+2019-03-14 Version: 1.53.38
+1, Update Dependency
+
+2019-03-14 Version: 1.53.37
+1,  Update Dependency
+
+2019-03-14 Version: 1.53.36
+1, Update Dependency
+
+2019-03-14 Version: 1.53.35
+1, Update Dependency
+
+2019-03-14 Version: 1.53.34
+1, Update Dependency
+
+2019-03-14 Version: 1.53.33
+1, Update Dependency
+
+2019-03-13 Version: 1.53.32
+1, Update Dependency
+
+2019-03-13 Version: 1.53.31
+1, Update Dependency
+
+2019-03-13 Version: 1.53.30
+1, Update Dependency
+
+2019-03-13 Version: 1.53.29
+1, Distinguish between system and service parameters
+
+2019-03-13 Version: 1.53.28
+1, add DescribeDemands interface
+
+2019-03-13 Version: 1.53.27
+1, Distinguish between system and service parameters
+
+2019-03-13 Version: 1.53.26
+1, Distinguish between system and service parameters
+
+2019-03-12 Version: 1.53.25
+1, Add application name support for config center APIs.
+2, Add GetCluster API.
+3, Support debug switch in user region APIs.
+
+2019-03-12 Version: 1.53.24
+1, Add Vpc openapi interface，Support for new fields.
+2, Support for ipv6 gateway openapi.
+3, Fixed some problems of the vpc openapi.
+
+2019-03-12 Version: 1.53.23
+1,  add agency infomation
+2,  update sdk core resources
+
+2019-03-11 Version: 1.53.22
+1,  add agency infomation
+2,  update sdk core resources
+
+2019-03-11 Version: 1.53.21
+1, Add face grouping feature .
+2, Add head pose and face quality.
+
+
+2019-03-11 Version: 1.53.20
+1, Update aliyun-java-sdk-core version.
+
 2019-03-08 Version: 1.53.19
 1, Publish instance spec describe api.
 

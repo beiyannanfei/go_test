@@ -16,11 +16,17 @@ package sdk
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
+	"os"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
+
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials/provider"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/responses"
 
@@ -119,7 +125,7 @@ func Test_NewClientWithRsaKeyPair(t *testing.T) {
 	assert.NotNil(t, client)
 }
 
-func mockResponse(statusCode int, content string) (res *http.Response, err error) {
+func mockResponse(statusCode int, content string, mockerr error) (res *http.Response, err error) {
 	status := strconv.Itoa(statusCode)
 	res = &http.Response{
 		Proto:      "HTTP/1.1",
@@ -129,10 +135,11 @@ func mockResponse(statusCode int, content string) (res *http.Response, err error
 		Status:     status + " " + http.StatusText(statusCode),
 	}
 	res.Body = ioutil.NopCloser(bytes.NewReader([]byte(content)))
+	err = mockerr
 	return
 }
 
-func Test_DoAction(t *testing.T) {
+func Test_DoActionWithProxy(t *testing.T) {
 	client, err := NewClientWithAccessKey("regionid", "acesskeyid", "accesskeysecret")
 	assert.Nil(t, err)
 	assert.NotNil(t, client)
@@ -150,14 +157,166 @@ func Test_DoAction(t *testing.T) {
 	defer func() { hookDo = origTestHookDo }()
 	hookDo = func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
 		return func(req *http.Request) (*http.Response, error) {
-			return mockResponse(200, "")
+			return mockResponse(200, "", nil)
 		}
 	}
 	err = client.DoAction(request, response)
 	assert.Nil(t, err)
 	assert.Equal(t, 200, response.GetHttpStatus())
 	assert.Equal(t, "", response.GetHttpContentString())
+
+	// Test when scheme is http, only http proxy is valid.
+	envHttpsProxy := os.Getenv("https_proxy")
+	os.Setenv("https_proxy", "https://127.0.0.1:9000")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ := client.httpClient.Transport.(*http.Transport)
+	assert.Nil(t, trans.Proxy)
+
+	// Test when host is in no_proxy, proxy is invalid
+	envNoProxy := os.Getenv("no_proxy")
+	os.Setenv("no_proxy", "ecs.aliyuncs.com")
+	envHttpProxy := os.Getenv("http_proxy")
+	os.Setenv("http_proxy", "http://127.0.0.1:8888")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	assert.Nil(t, trans.Proxy)
+
+	client.SetNoProxy("ecs.testaliyuncs.com")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ := trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "http")
+	assert.Equal(t, url.Host, "127.0.0.1:8888")
+
+	// Test when setting http proxy, client has a high priority than environment variable
+	client.SetHttpProxy("http://127.0.0.1:8080")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ = trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "http")
+	assert.Equal(t, url.Host, "127.0.0.1:8080")
+
+	// Test when scheme is https, only https proxy is valid
+	request.Scheme = "https"
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ = trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "https")
+	assert.Equal(t, url.Host, "127.0.0.1:9000")
+
+	// Test when setting https proxy, client has a high priority than environment variable
+	client.SetHttpsProxy("https://username:password@127.0.0.1:6666")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ = trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "https")
+	assert.Equal(t, url.Host, "127.0.0.1:6666")
+	assert.Equal(t, url.User.Username(), "username")
+
 	client.Shutdown()
+	os.Setenv("https_proxy", envHttpsProxy)
+	os.Setenv("http_proxy", envHttpProxy)
+	os.Setenv("no_proxy", envNoProxy)
+	assert.Equal(t, false, client.isRunning)
+}
+
+func Test_DoAction_HTTPSInsecure(t *testing.T) {
+	client, err := NewClientWithAccessKey("regionid", "acesskeyid", "accesskeysecret")
+	assert.Nil(t, err)
+	assert.NotNil(t, client)
+
+	client.SetHTTPSInsecure(true)
+	request := requests.NewCommonRequest()
+	request.Product = "Ram"
+	request.Version = "2015-05-01"
+	request.ApiName = "CreateRole"
+	request.Domain = "ecs.aliyuncs.com"
+	request.QueryParams["RegionId"] = os.Getenv("REGION_ID")
+	request.TransToAcsRequest()
+	response := responses.NewCommonResponse()
+	origTestHookDo := hookDo
+	defer func() { hookDo = origTestHookDo }()
+	hookDo = func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
+		return func(req *http.Request) (*http.Response, error) {
+			return mockResponse(200, "", nil)
+		}
+	}
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	assert.Equal(t, 200, response.GetHttpStatus())
+	assert.Equal(t, "", response.GetHttpContentString())
+	trans := client.httpClient.Transport.(*http.Transport)
+	assert.Equal(t, true, trans.TLSClientConfig.InsecureSkipVerify)
+
+	request.SetHTTPSInsecure(false)
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans = client.httpClient.Transport.(*http.Transport)
+	assert.Equal(t, false, trans.TLSClientConfig.InsecureSkipVerify)
+
+	// Test when scheme is http, only http proxy is valid.
+	envHttpsProxy := os.Getenv("HTTPS_PROXY")
+	os.Setenv("HTTPS_PROXY", "https://127.0.0.1:9000")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	assert.Nil(t, trans.Proxy)
+
+	// Test when host is in no_proxy, proxy is invalid
+	envNoProxy := os.Getenv("NO_PROXY")
+	os.Setenv("NO_PROXY", "ecs.aliyuncs.com")
+	envHttpProxy := os.Getenv("HTTP_PROXY")
+	os.Setenv("HTTP_PROXY", "http://127.0.0.1:8888")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	assert.Nil(t, trans.Proxy)
+
+	client.SetNoProxy("ecs.testaliyuncs.com")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ := trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "http")
+	assert.Equal(t, url.Host, "127.0.0.1:8888")
+
+	// Test when setting http proxy, client has a high priority than environment variable
+	client.SetHttpProxy("http://127.0.0.1:8080")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ = trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "http")
+	assert.Equal(t, url.Host, "127.0.0.1:8080")
+
+	// Test when scheme is https, only https proxy is valid
+	request.Scheme = "https"
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ = trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "https")
+	assert.Equal(t, url.Host, "127.0.0.1:9000")
+
+	// Test when setting https proxy, client has a high priority than environment variable
+	client.SetHttpsProxy("https://127.0.0.1:6666")
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	trans, _ = client.httpClient.Transport.(*http.Transport)
+	url, _ = trans.Proxy(nil)
+	assert.Equal(t, url.Scheme, "https")
+	assert.Equal(t, url.Host, "127.0.0.1:6666")
+
+	client.Shutdown()
+	os.Setenv("HTTPS_PROXY", envHttpsProxy)
+	os.Setenv("HTTP_PROXY", envHttpProxy)
+	os.Setenv("NO_PROXY", envNoProxy)
 	assert.Equal(t, false, client.isRunning)
 }
 
@@ -179,13 +338,33 @@ func Test_DoAction_Timeout(t *testing.T) {
 	defer func() { hookDo = origTestHookDo }()
 	hookDo = func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
 		return func(req *http.Request) (*http.Response, error) {
-			return mockResponse(200, "")
+			return mockResponse(400, "Server Internel Error", fmt.Errorf("read tcp"))
 		}
 	}
 	err = client.DoAction(request, response)
-	assert.Nil(t, err)
-	assert.Equal(t, 200, response.GetHttpStatus())
+	assert.NotNil(t, err)
+	assert.Equal(t, 0, response.GetHttpStatus())
 	assert.Equal(t, "", response.GetHttpContentString())
+
+	// Test set client timeout
+	client.SetReadTimeout(1 * time.Millisecond)
+	client.SetConnectTimeout(1 * time.Millisecond)
+	assert.Equal(t, 1*time.Millisecond, client.GetConnectTimeout())
+	assert.Equal(t, 1*time.Millisecond, client.GetReadTimeout())
+	client.config.AutoRetry = false
+	err = client.DoAction(request, response)
+	assert.NotNil(t, err)
+	assert.Equal(t, 0, response.GetHttpStatus())
+	assert.Equal(t, "", response.GetHttpContentString())
+
+	// Test set request timeout
+	request.SetReadTimeout(1 * time.Millisecond)
+	request.SetConnectTimeout(1 * time.Millisecond)
+	err = client.DoAction(request, response)
+	assert.NotNil(t, err)
+	assert.Equal(t, 0, response.GetHttpStatus())
+	assert.Equal(t, "", response.GetHttpContentString())
+
 	client.Shutdown()
 	assert.Equal(t, false, client.isRunning)
 }
@@ -207,13 +386,24 @@ func Test_ProcessCommonRequest(t *testing.T) {
 	defer func() { hookDo = origTestHookDo }()
 	hookDo = func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
 		return func(req *http.Request) (*http.Response, error) {
-			return mockResponse(200, "")
+			return mockResponse(400, "", fmt.Errorf("test error"))
 		}
 	}
-	response, err := client.ProcessCommonRequest(request)
-	assert.Nil(t, err)
-	assert.Equal(t, 200, response.GetHttpStatus())
-	assert.Equal(t, "", response.GetHttpContentString())
+	resp, err := client.ProcessCommonRequest(request)
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "test error")
+	assert.Equal(t, 0, resp.GetHttpStatus())
+	assert.Equal(t, "", resp.GetHttpContentString())
+}
+
+func mockServer(status int, json string) (server *httptest.Server) {
+	// Start a test server locally.
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(status)
+		w.Write([]byte(json))
+		return
+	}))
+	return ts
 }
 
 func Test_DoAction_With500(t *testing.T) {
@@ -222,7 +412,6 @@ func Test_DoAction_With500(t *testing.T) {
 	assert.NotNil(t, client)
 	assert.Equal(t, true, client.isRunning)
 	request := requests.NewCommonRequest()
-	request.Domain = "ecs.aliyuncs.com"
 	request.Version = "2014-05-26"
 	request.ApiName = "DescribeInstanceStatus"
 
@@ -230,17 +419,66 @@ func Test_DoAction_With500(t *testing.T) {
 	request.QueryParams["PageSize"] = "30"
 	request.TransToAcsRequest()
 	response := responses.NewCommonResponse()
-	origTestHookDo := hookDo
-	defer func() { hookDo = origTestHookDo }()
-	hookDo = func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
-		return func(req *http.Request) (*http.Response, error) {
-			return mockResponse(500, "Server Internel Error")
-		}
-	}
+	ts := mockServer(500, "Server Internel Error")
+	defer ts.Close()
+	domain := strings.Replace(ts.URL, "http://", "", 1)
+	request.Domain = domain
 	err = client.DoAction(request, response)
 	assert.NotNil(t, err)
-	assert.Equal(t, "SDK.ServerError\nErrorCode: \nRecommend: \nRequestId: \nMessage: Server Internel Error", err.Error())
 	assert.Equal(t, 500, response.GetHttpStatus())
+	assert.Equal(t, "Server Internel Error", response.GetHttpContentString())
+}
+
+func Test_DoAction_WithLogger(t *testing.T) {
+	client, err := NewClientWithAccessKey("regionid", "acesskeyid", "accesskeysecret")
+	assert.Nil(t, err)
+	assert.NotNil(t, client)
+	assert.Equal(t, true, client.isRunning)
+	request := requests.NewCommonRequest()
+	request.Version = "2014-05-26"
+	request.ApiName = "DescribeInstanceStatus"
+	request.TransToAcsRequest()
+	response := responses.NewCommonResponse()
+	ts := mockServer(500, "Server Internel Error")
+	defer ts.Close()
+	domain := strings.Replace(ts.URL, "http://", "", 1)
+	request.Domain = domain
+	f1, err := os.Create("test.txt")
+	defer os.Remove("test.txt")
+	assert.Nil(t, err)
+
+	// Test when set logger, it will create a new client logger.
+	client.SetLogger("error", "Alibaba", f1, "")
+	err = client.DoAction(request, response)
+	assert.NotNil(t, err)
+	log := client.GetLogger()
+	assert.Contains(t, client.GetLoggerMsg(), "Alibaba: \"GET /?AccessKeyId=acesskeyid&Action=DescribeInstanceStatus&Format=JSON&RegionId=regionid")
+	assert.Equal(t, 500, response.GetHttpStatus())
+	assert.Equal(t, true, log.isOpen)
+	assert.Equal(t, "Server Internel Error", response.GetHttpContentString())
+
+	// Test when close logger, it will not print log.
+	client.CloseLogger()
+	err = client.DoAction(request, response)
+	assert.NotNil(t, err)
+	log = client.GetLogger()
+	assert.Equal(t, 500, response.GetHttpStatus())
+	assert.Equal(t, false, log.isOpen)
+	assert.Equal(t, "{time} {channel}: \"{method} {uri} HTTP/{version}\" {code} {cost} {hostname}", client.GetTemplate())
+	assert.Contains(t, client.GetLoggerMsg(), `GET /?AccessKeyId=acesskeyid&Action=DescribeInstanceStatus&Format=JSON&RegionId=regionid`)
+	assert.Equal(t, "Server Internel Error", response.GetHttpContentString())
+
+	// Test when open logger, it will print log.
+	client.OpenLogger()
+	template := "{channel}: \"{method} {code}"
+	client.SetTemplate(template)
+	err = client.DoAction(request, response)
+	assert.NotNil(t, err)
+	log = client.GetLogger()
+	assert.Equal(t, 500, response.GetHttpStatus())
+	assert.Equal(t, true, log.isOpen)
+	assert.Equal(t, "{channel}: \"{method} {code}", client.GetTemplate())
+	assert.Equal(t, client.GetLoggerMsg(), `Alibaba: "GET 500`)
 	assert.Equal(t, "Server Internel Error", response.GetHttpContentString())
 }
 
@@ -300,8 +538,17 @@ func TestClient_ProcessCommonRequestWithSigner(t *testing.T) {
 	signer := &signertest{
 		name: "signer",
 	}
-	_, err = client.ProcessCommonRequestWithSigner(request, signer)
+	origTestHookDo := hookDo
+	defer func() { hookDo = origTestHookDo }()
+	hookDo = func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
+		return func(req *http.Request) (*http.Response, error) {
+			return mockResponse(500, "Server Internel Error", fmt.Errorf("test error"))
+		}
+	}
+	resp, err := client.ProcessCommonRequestWithSigner(request, signer)
 	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "test error")
+	assert.Equal(t, resp.GetHttpContentString(), "")
 }
 
 func TestClient_AppendUserAgent(t *testing.T) {
@@ -323,26 +570,31 @@ func TestClient_AppendUserAgent(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, DefaultUserAgent, httpRequest.Header.Get("User-Agent"))
 
+	// Test set client useragent.
 	client.AppendUserAgent("test", "1.01")
 	httpRequest, err = client.buildRequestWithSigner(request, signer)
 	assert.Equal(t, DefaultUserAgent+" test/1.01", httpRequest.Header.Get("User-Agent"))
 
+	// Test set request useragent. And request useragent has a higner priority than client's.
 	request.AppendUserAgent("test", "2.01")
 	httpRequest, err = client.buildRequestWithSigner(request, signer)
 	assert.Equal(t, DefaultUserAgent+" test/2.01", httpRequest.Header.Get("User-Agent"))
 
+	client.AppendUserAgent("test", "2.02")
+	httpRequest, err = client.buildRequestWithSigner(request, signer)
+	assert.Equal(t, DefaultUserAgent+" test/2.01", httpRequest.Header.Get("User-Agent"))
+
+	// Test update request useragent.
 	request.AppendUserAgent("test", "2.02")
 	httpRequest, err = client.buildRequestWithSigner(request, signer)
 	assert.Equal(t, DefaultUserAgent+" test/2.02", httpRequest.Header.Get("User-Agent"))
 
-	client.AppendUserAgent("test", "2.01")
-	httpRequest, err = client.buildRequestWithSigner(request, signer)
-	assert.Equal(t, DefaultUserAgent+" test/2.02", httpRequest.Header.Get("User-Agent"))
-
+	// Test client can't modify DefaultUserAgent.
 	client.AppendUserAgent("core", "1.01")
 	httpRequest, err = client.buildRequestWithSigner(request, signer)
 	assert.Equal(t, DefaultUserAgent+" test/2.02", httpRequest.Header.Get("User-Agent"))
 
+	// Test request can't modify DefaultUserAgent.
 	request.AppendUserAgent("core", "1.01")
 	httpRequest, err = client.buildRequestWithSigner(request, signer)
 	assert.Equal(t, DefaultUserAgent+" test/2.02", httpRequest.Header.Get("User-Agent"))
@@ -356,7 +608,7 @@ func TestClient_AppendUserAgent(t *testing.T) {
 	request1.TransToAcsRequest()
 	httpRequest, err = client.buildRequestWithSigner(request1, signer)
 	assert.Nil(t, err)
-	assert.Equal(t, DefaultUserAgent+" test/2.01 sys/1.01", httpRequest.Header.Get("User-Agent"))
+	assert.Equal(t, DefaultUserAgent+" test/2.02 sys/1.01", httpRequest.Header.Get("User-Agent"))
 }
 
 func TestClient_ProcessCommonRequestWithSigner_Error(t *testing.T) {
@@ -372,12 +624,21 @@ func TestClient_ProcessCommonRequestWithSigner_Error(t *testing.T) {
 	request.QueryParams["PageNumber"] = "1"
 	request.QueryParams["PageSize"] = "30"
 	request.RegionId = "regionid"
+	origTestHookDo := hookDo
 	defer func() {
+		hookDo = origTestHookDo
 		err := recover()
 		assert.NotNil(t, err)
 	}()
-	_, err = client.ProcessCommonRequestWithSigner(request, nil)
+	hookDo = func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
+		return func(req *http.Request) (*http.Response, error) {
+			return mockResponse(500, "Server Internel Error", fmt.Errorf("test error"))
+		}
+	}
+	resp, err := client.ProcessCommonRequestWithSigner(request, nil)
 	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "test error")
+	assert.Equal(t, resp.GetHttpContentString(), "Server Internel Error")
 }
 
 func TestClient_NewClientWithStsRoleNameOnEcs(t *testing.T) {
@@ -404,12 +665,59 @@ func TestClient_NewClientWithStsRoleArn(t *testing.T) {
 	assert.Equal(t, false, client.isRunning)
 }
 
-//func Test_EnableAsync(t *testing.T) {
-//	client, err := NewClientWithAccessKey("regionid", "acesskeyid", "accesskeysecret")
-//	assert.Nil(t, err)
-//	assert.NotNil(t, client)
-//	assert.Equal(t, true, client.isRunning)
-//	client.EnableAsync(2, 8)
-//	client.Shutdown()
-//	assert.Equal(t, false, client.isRunning)
-//}
+func TestInitWithProviderChain(t *testing.T) {
+
+	//testcase1: No any environment variable
+	c, err := NewClientWithProvider("cn-hangzhou")
+	assert.Empty(t, c)
+	assert.EqualError(t, err, "No credential found")
+
+	//testcase2: AK
+	os.Setenv(provider.ENVAccessKeyID, "AccessKeyId")
+	os.Setenv(provider.ENVAccessKeySecret, "AccessKeySecret")
+
+	c, err = NewClientWithProvider("cn-hangzhou")
+	assert.Nil(t, err)
+	expC, err := NewClientWithAccessKey("cn-hangzhou", "AccessKeyId", "AccessKeySecret")
+	assert.Nil(t, err)
+	assert.Equal(t, expC, c)
+
+	//testcase3:AK value is ""
+	os.Setenv(provider.ENVAccessKeyID, "")
+	os.Setenv(provider.ENVAccessKeySecret, "bbbb")
+	c, err = NewClientWithProvider("cn-hangzhou")
+	assert.EqualError(t, err, "Environmental variable (ALIBABACLOUD_ACCESS_KEY_ID or ALIBABACLOUD_ACCESS_KEY_SECRET) is empty")
+	assert.Empty(t, c)
+
+	//testcase4: Profile value is ""
+	os.Unsetenv(provider.ENVAccessKeyID)
+	os.Unsetenv(provider.ENVAccessKeySecret)
+	os.Setenv(provider.ENVCredentialFile, "")
+	c, err = NewClientWithProvider("cn-hangzhou")
+	assert.Empty(t, c)
+	assert.EqualError(t, err, "Environment variable 'ALIBABA_CLOUD_CREDENTIALS_FILE' cannot be empty")
+
+	//testcase5: Profile
+	os.Setenv(provider.ENVCredentialFile, "./profile")
+	c, err = NewClientWithProvider("cn-hangzhou")
+	assert.Empty(t, c)
+	assert.NotNil(t, err)
+	//testcase6:Instances
+	os.Unsetenv(provider.ENVCredentialFile)
+	os.Setenv(provider.ENVEcsMetadata, "")
+	c, err = NewClientWithProvider("cn-hangzhou")
+	assert.Empty(t, c)
+	assert.EqualError(t, err, "Environmental variable 'ALIBABA_CLOUD_ECS_METADATA' are empty")
+
+	//testcase7: Custom Providers
+	c, err = NewClientWithProvider("cn-hangzhou", provider.ProviderProfile, provider.ProviderEnv)
+	assert.Empty(t, c)
+	assert.EqualError(t, err, "No credential found")
+
+}
+
+func TestNewClientWithBearerToken(t *testing.T) {
+	client, err := NewClientWithBearerToken("cn-hangzhou", "Bearer.Token")
+	assert.Nil(t, err)
+	assert.NotNil(t, client)
+}

@@ -11,7 +11,6 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/slb"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/vpc"
 	"github.com/stretchr/testify/assert"
-
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -30,7 +29,6 @@ func Test_DescribeClusteWithROArequestWithXMLWithGet(t *testing.T) {
 	request := cs.CreateDescribeClusterDetailRequest()
 	request.SetContentType("XML")
 	request.SetScheme("HTTPS")
-	request.SetDomain("cs.aliyuncs.com")
 	response, err := client.DescribeClusterDetail(request)
 	assert.NotNil(t, err)
 	assert.Equal(t, 400, response.GetHttpStatus())
@@ -43,7 +41,6 @@ func Test_ScaleClusterWithROArequestWithXMLWithPUT(t *testing.T) {
 	request := cs.CreateScaleClusterRequest()
 	request.SetContentType("XML")
 	request.SetScheme("HTTPS")
-	request.SetDomain("cs.aliyuncs.com")
 	response, err := client.ScaleCluster(request)
 	assert.NotNil(t, err)
 	assert.Equal(t, 400, response.GetHttpStatus())
@@ -53,14 +50,13 @@ func Test_ScaleClusterWithROArequestWithXMLWithPUT(t *testing.T) {
 func Test_CreateClusterTokenWithROArequestWithXMLWithPOST(t *testing.T) {
 	client, err := cs.NewClientWithAccessKey(os.Getenv("REGION_ID"), os.Getenv("ACCESS_KEY_ID"), os.Getenv("ACCESS_KEY_SECRET"))
 	assert.Nil(t, err)
-	request := cs.CreateCreateClusterTokenRequest()
+	request := cs.CreateCreateClusterRequest()
 	request.SetContentType("XML")
 	request.SetScheme("HTTPS")
-	request.SetDomain("cs.aliyuncs.com")
-	response, err := client.CreateClusterToken(request)
+	response, err := client.CreateCluster(request)
 	assert.NotNil(t, err)
 	assert.Equal(t, 400, response.GetHttpStatus())
-	assert.Contains(t, err.Error(), "Request url is invalid")
+	assert.Contains(t, err.Error(), "Request body can't be empty")
 }
 
 func Test_DeleteClusterWithROArequestWithXMLWithDelete(t *testing.T) {
@@ -69,7 +65,6 @@ func Test_DeleteClusterWithROArequestWithXMLWithDelete(t *testing.T) {
 	request := cs.CreateDeleteClusterRequest()
 	request.SetContentType("XML")
 	request.SetScheme("HTTPS")
-	request.SetDomain("cs.aliyuncs.com")
 	response, err := client.DeleteCluster(request)
 	assert.NotNil(t, err)
 	assert.Equal(t, 400, response.GetHttpStatus())
@@ -82,7 +77,6 @@ func Test_DeleteClusterWithROArequestWithJSONWithDelete(t *testing.T) {
 	request := cs.CreateDeleteClusterRequest()
 	request.SetContentType("JSON")
 	request.SetScheme("HTTPS")
-	request.SetDomain("cs.aliyuncs.com")
 	response, err := client.DeleteCluster(request)
 	assert.NotNil(t, err)
 	assert.Equal(t, 400, response.GetHttpStatus())
@@ -95,7 +89,6 @@ func Test_ScaleClusterWithROArequestWithJSONWithPUT(t *testing.T) {
 	request := cs.CreateScaleClusterRequest()
 	request.SetContentType("JSON")
 	request.SetScheme("HTTPS")
-	request.SetDomain("cs.aliyuncs.com")
 	response, err := client.ScaleCluster(request)
 	assert.NotNil(t, err)
 	assert.Equal(t, 400, response.GetHttpStatus())

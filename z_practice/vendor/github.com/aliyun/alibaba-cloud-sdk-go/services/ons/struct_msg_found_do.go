@@ -17,8 +17,8 @@ package ons
 
 // MsgFoundDo is a nested struct in ons response
 type MsgFoundDo struct {
-	TaskId       string       `json:"TaskId" xml:"TaskId"`
-	MaxPageCount int          `json:"MaxPageCount" xml:"MaxPageCount"`
-	CurrentPage  int          `json:"CurrentPage" xml:"CurrentPage"`
-	MsgFoundList MsgFoundList `json:"MsgFoundList" xml:"MsgFoundList"`
+	TaskId       string                                        `json:"TaskId" xml:"TaskId"`
+	MaxPageCount int                                           `json:"MaxPageCount" xml:"MaxPageCount"`
+	CurrentPage  int                                           `json:"CurrentPage" xml:"CurrentPage"`
+	MsgFoundList MsgFoundListInOnsDLQMessagePageQueryByGroupId `json:"MsgFoundList" xml:"MsgFoundList"`
 }

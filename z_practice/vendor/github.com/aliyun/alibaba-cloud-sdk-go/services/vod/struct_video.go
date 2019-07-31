@@ -29,9 +29,9 @@ type Video struct {
 	RegionId          string      `json:"RegionId" xml:"RegionId"`
 	Duration          float64     `json:"Duration" xml:"Duration"`
 	CateName          string      `json:"CateName" xml:"CateName"`
-	Size              int         `json:"Size" xml:"Size"`
+	Size              int64       `json:"Size" xml:"Size"`
 	Description       string      `json:"Description" xml:"Description"`
-	CateId            int         `json:"CateId" xml:"CateId"`
+	CateId            int64       `json:"CateId" xml:"CateId"`
 	Tags              string      `json:"Tags" xml:"Tags"`
 	PreprocessStatus  string      `json:"PreprocessStatus" xml:"PreprocessStatus"`
 	TranscodeMode     string      `json:"TranscodeMode" xml:"TranscodeMode"`
@@ -40,6 +40,7 @@ type Video struct {
 	CreationTime      string      `json:"CreationTime" xml:"CreationTime"`
 	AuditAIResult     string      `json:"AuditAIResult" xml:"AuditAIResult"`
 	CoverURL          string      `json:"CoverURL" xml:"CoverURL"`
+	AppId             string      `json:"AppId" xml:"AppId"`
 	AuditTemplateId   string      `json:"AuditTemplateId" xml:"AuditTemplateId"`
 	Status            string      `json:"Status" xml:"Status"`
 	AuditStatus       string      `json:"AuditStatus" xml:"AuditStatus"`

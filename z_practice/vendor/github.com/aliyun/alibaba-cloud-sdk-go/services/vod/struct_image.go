@@ -19,7 +19,7 @@ package vod
 type Image struct {
 	Title            string `json:"Title" xml:"Title"`
 	ImageId          string `json:"ImageId" xml:"ImageId"`
-	CateId           int    `json:"CateId" xml:"CateId"`
+	CateId           int64  `json:"CateId" xml:"CateId"`
 	CateName         string `json:"CateName" xml:"CateName"`
 	Ext              string `json:"Ext" xml:"Ext"`
 	CreationTime     string `json:"CreationTime" xml:"CreationTime"`
@@ -31,4 +31,5 @@ type Image struct {
 	Description      string `json:"Description" xml:"Description"`
 	StorageLocation  string `json:"StorageLocation" xml:"StorageLocation"`
 	RegionId         string `json:"RegionId" xml:"RegionId"`
+	AppId            string `json:"AppId" xml:"AppId"`
 }

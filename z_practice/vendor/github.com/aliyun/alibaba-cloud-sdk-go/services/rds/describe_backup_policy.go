@@ -79,6 +79,7 @@ type DescribeBackupPolicyRequest struct {
 	ResourceOwnerId      requests.Integer `position:"Query" name:"ResourceOwnerId"`
 	ResourceOwnerAccount string           `position:"Query" name:"ResourceOwnerAccount"`
 	OwnerAccount         string           `position:"Query" name:"OwnerAccount"`
+	CompressType         string           `position:"Query" name:"CompressType"`
 	DBInstanceId         string           `position:"Query" name:"DBInstanceId"`
 	OwnerId              requests.Integer `position:"Query" name:"OwnerId"`
 	BackupPolicyMode     string           `position:"Query" name:"BackupPolicyMode"`
@@ -101,6 +102,7 @@ type DescribeBackupPolicyResponse struct {
 	DuplicationContent       string              `json:"DuplicationContent" xml:"DuplicationContent"`
 	HighSpaceUsageProtection string              `json:"HighSpaceUsageProtection" xml:"HighSpaceUsageProtection"`
 	LogBackupFrequency       string              `json:"LogBackupFrequency" xml:"LogBackupFrequency"`
+	CompressType             string              `json:"CompressType" xml:"CompressType"`
 	DuplicationLocation      DuplicationLocation `json:"DuplicationLocation" xml:"DuplicationLocation"`
 }
 

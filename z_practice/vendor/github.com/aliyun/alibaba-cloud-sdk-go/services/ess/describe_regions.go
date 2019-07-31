@@ -79,12 +79,14 @@ type DescribeRegionsRequest struct {
 	ResourceOwnerId      requests.Integer `position:"Query" name:"ResourceOwnerId"`
 	ResourceOwnerAccount string           `position:"Query" name:"ResourceOwnerAccount"`
 	OwnerId              requests.Integer `position:"Query" name:"OwnerId"`
+	AcceptLanguage       string           `position:"Query" name:"AcceptLanguage"`
 }
 
 // DescribeRegionsResponse is the response struct for api DescribeRegions
 type DescribeRegionsResponse struct {
 	*responses.BaseResponse
-	Regions Regions `json:"Regions" xml:"Regions"`
+	RequestId string  `json:"RequestId" xml:"RequestId"`
+	Regions   Regions `json:"Regions" xml:"Regions"`
 }
 
 // CreateDescribeRegionsRequest creates a request to invoke DescribeRegions API

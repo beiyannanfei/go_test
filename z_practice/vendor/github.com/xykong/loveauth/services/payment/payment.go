@@ -1,7 +1,0 @@
-package payment
-
-
-
-func loadTemplate() {
-
-}

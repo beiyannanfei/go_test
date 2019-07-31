@@ -17,11 +17,12 @@ package ehpc
 
 // QueueInfo is a nested struct in ehpc response
 type QueueInfo struct {
-	QueueName        string  `json:"QueueName" xml:"QueueName"`
-	SpotPriceLimit   float64 `json:"SpotPriceLimit" xml:"SpotPriceLimit"`
-	EnableAutoGrow   bool    `json:"EnableAutoGrow" xml:"EnableAutoGrow"`
-	EnableAutoShrink bool    `json:"EnableAutoShrink" xml:"EnableAutoShrink"`
-	InstanceType     string  `json:"InstanceType" xml:"InstanceType"`
-	SpotStrategy     string  `json:"SpotStrategy" xml:"SpotStrategy"`
-	Type             string  `json:"Type" xml:"Type"`
+	QueueName        string        `json:"QueueName" xml:"QueueName"`
+	SpotPriceLimit   float64       `json:"SpotPriceLimit" xml:"SpotPriceLimit"`
+	EnableAutoGrow   bool          `json:"EnableAutoGrow" xml:"EnableAutoGrow"`
+	EnableAutoShrink bool          `json:"EnableAutoShrink" xml:"EnableAutoShrink"`
+	InstanceType     string        `json:"InstanceType" xml:"InstanceType"`
+	SpotStrategy     string        `json:"SpotStrategy" xml:"SpotStrategy"`
+	Type             string        `json:"Type" xml:"Type"`
+	InstanceTypes    InstanceTypes `json:"InstanceTypes" xml:"InstanceTypes"`
 }
