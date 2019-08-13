@@ -1,0 +1,12 @@
+hash: a23b0da9c0bfb95d427f968fc53cdd819fe39976bb942b22f139571d5165c617
+updated: 2019-08-06T15:00:17.010354+08:00
+imports:
+- name: github.com/highras/fpnn-sdk-go
+  version: 9f08c3c5e8ba4fc674e38430cec3c8e740bdad63
+  subpackages:
+  - src/fpnn
+- name: github.com/ugorji/go
+  version: 19cb75f56d02e9eaa11a23c037d641afa194bf4f
+  subpackages:
+  - codec
+testImports: []
