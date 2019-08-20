@@ -1,0 +1,78 @@
+{
+	"ImportPath": "github.com/beiyannanfei/go_test/z_practice/godep/e1",
+	"GoVersion": "go1.12",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/labstack/echo",
+			"Comment": "v4.1.10",
+			"Rev": "88a9ad73ec5303231a3b843960cefaa8fe666510"
+		},
+		{
+			"ImportPath": "github.com/labstack/gommon/color",
+			"Comment": "v0.3.0",
+			"Rev": "4919956f6fb227b548f004da27c7c6b20fba499f"
+		},
+		{
+			"ImportPath": "github.com/labstack/gommon/log",
+			"Comment": "v0.3.0",
+			"Rev": "4919956f6fb227b548f004da27c7c6b20fba499f"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-colorable",
+			"Comment": "v0.1.2-5-g388941e",
+			"Rev": "388941e3ea99c461d2bc2747eaf27741b6dda096"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Comment": "v0.0.9-1-gbf9a1de",
+			"Rev": "bf9a1dea1961e1d831824fb135332bfb8c10e8b8"
+		},
+		{
+			"ImportPath": "github.com/valyala/bytebufferpool",
+			"Comment": "v1.0.0-1-gcdfbe93",
+			"Rev": "cdfbe9377474227bb42120c1e22fd4433e7f69bf"
+		},
+		{
+			"ImportPath": "github.com/valyala/fasttemplate",
+			"Comment": "v1.0.1",
+			"Rev": "8b5e4e491ab636663841c42ea3c5a9adebabaf36"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/acme",
+			"Rev": "4def268fd1a49955bfb3dda92fe3db4f924f2285"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/acme/autocert",
+			"Rev": "4def268fd1a49955bfb3dda92fe3db4f924f2285"
+		},
+		{
+			"ImportPath": "golang.org/x/net/idna",
+			"Rev": "74dc4d7220e7acc4e100824340f3e66577424772"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "13d03a9a82fba647c21a0ef8fba44a795d0f0835"
+		},
+		{
+			"ImportPath": "golang.org/x/text/secure/bidirule",
+			"Comment": "v0.3.0-43-gece95c7",
+			"Rev": "ece95c760240037f89ebcbdd7155ac8cb52e38fa"
+		},
+		{
+			"ImportPath": "golang.org/x/text/transform",
+			"Comment": "v0.3.0-43-gece95c7",
+			"Rev": "ece95c760240037f89ebcbdd7155ac8cb52e38fa"
+		},
+		{
+			"ImportPath": "golang.org/x/text/unicode/bidi",
+			"Comment": "v0.3.0-43-gece95c7",
+			"Rev": "ece95c760240037f89ebcbdd7155ac8cb52e38fa"
+		},
+		{
+			"ImportPath": "golang.org/x/text/unicode/norm",
+			"Comment": "v0.3.0-43-gece95c7",
+			"Rev": "ece95c760240037f89ebcbdd7155ac8cb52e38fa"
+		}
+	]
+}
