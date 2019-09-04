@@ -1,38 +1,20 @@
 package main
 
-import (
-	"fmt"
-	"runtime"
-)
-
-type People struct{}
-
-func (p *People) ShowA() {
-	fmt.Println("showA")
-	p.ShowB()
-}
-func (p *People) ShowB() {
-	fmt.Println("showB")
-}
-
-type Teacher struct {
-	People
-}
-
-func (t *Teacher) ShowB() {
-	fmt.Println("teacher showB")
-}
+import "fmt"
 
 func main() {
-	runtime.GOMAXPROCS(1)
-	int_chan := make(chan int, 1)
-	string_chan := make(chan string, 1)
-	int_chan <- 1
-	string_chan <- "hello"
-	select {
-	case value := <-int_chan:
-		fmt.Println(value)
-	case value := <-string_chan:
-		panic(value)
+	params := map[string]interface{}{
+		"cpId":          "cpId",
+		"appId":         "appId",
+		"cpOrderNumber": "cpOrderNumber",
+		"notifyUrl":     "notifyUrl",
+		"orderAmount":   "orderAmount",
+		"orderTitle":    "orderTitle",
+		"orderDesc":     "orderDesc",
+		"extInfo":       "extInfo",
 	}
+
+	var s string
+	s = fmt.Sprintf("%v", params["orderTitle"])
+	fmt.Println(s)
 }

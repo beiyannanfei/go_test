@@ -63,7 +63,7 @@ func main() {
 	fmt.Println("=============================")
 
 	regexpReguler := `^1[3-9]\d{9}$`
-	m, _ := regexp.MatchString(regexpReguler, "18810776836")
+	m, _ := regexp.MatchString(regexpReguler, "13812345678")
 	fmt.Println(m)
 
 	fmt.Println("=============================")
