@@ -37,6 +37,7 @@ func switch2() {
 
 func switch_type() {
 	var x interface{}
+	x = 12.34
 
 	switch i := x.(type) { //技巧 := 可以不使用var声明，所有i会根据赋值类型自动判断，所以这个很有技巧性
 	case nil:
