@@ -1,5 +1,7 @@
 module github.com/beiyannanfei/go_test
 
+go 1.12
+
 require (
 	github.com/bwmarrin/snowflake v0.0.0-20180319212030-f613937295cd
 	github.com/go-sql-driver/mysql v1.3.0

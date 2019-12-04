@@ -3,9 +3,18 @@ package main
 import "fmt"
 
 func main() {
-	s1()
-	fmt.Println("============================")
+	//s1()
+	//fmt.Println("============================")
 
+	var Book1 Books
+
+	Book1.title = "Go 语言"
+	Book1.author = "www.runoob.com"
+	Book1.subject = "Go 语言教程"
+	Book1.book_id = 6495407
+
+	fmt.Printf("%v\n", Book1)
+	fmt.Printf("%+v\n", Book1)
 }
 
 func structParam(book Books) { //结构体作为函数参数
@@ -55,7 +64,7 @@ func s1() {
 
 func printBook(book *Books) {
 	println(book)
-	fmt.Printf("Book title : %s\n", book.title)		//结构体不需要取值操作符*
+	fmt.Printf("Book title : %s\n", book.title) //结构体不需要取值操作符*
 	fmt.Printf("Book author : %s\n", book.author)
 	fmt.Printf("Book subject : %s\n", book.subject)
 	fmt.Printf("Book book_id : %d\n", book.book_id)
